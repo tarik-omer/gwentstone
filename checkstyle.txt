@@ -1,2 +1,7 @@
 Starting audit...
+[ERROR] C:\Users\tarik_ilhan.omer\OneDrive - Universitatea Politehnica Bucuresti\Desktop\gwentstone\.\src\fileio\StartGameInput.java:11:29: '{' is not followed by whitespace. [WhitespaceAround]
+[ERROR] C:\Users\tarik_ilhan.omer\OneDrive - Universitatea Politehnica Bucuresti\Desktop\gwentstone\.\src\fileio\StartGameInput.java:11:30: '}' is not preceded with whitespace. [WhitespaceAround]
+[ERROR] C:\Users\tarik_ilhan.omer\OneDrive - Universitatea Politehnica Bucuresti\Desktop\gwentstone\.\src\main\StartGame.java:6:5: Class 'StartGame' looks like designed for extension (can be subclassed), but the method 'runGame' does not have javadoc that explains how to do that safely. If class is not designed for extension consider making the class 'StartGame' final or making the method 'runGame' static/final/abstract/empty, or adding allowed annotation for the method. [DesignForExtension]
+[ERROR] C:\Users\tarik_ilhan.omer\OneDrive - Universitatea Politehnica Bucuresti\Desktop\gwentstone\.\src\main\StartGame.java:6:5: Missing a Javadoc comment. [MissingJavadocMethod]
 Audit done.
+Checkstyle ends with 4 errors.
