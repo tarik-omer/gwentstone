@@ -1,1 +1,72 @@
-[ ]
+[ [ {
+  "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
+  "colors" : [ "Purple", "Yellow" ],
+  "name" : "Berserker",
+  "mana" : 1,
+  "health" : 2,
+  "attackDamage" : 5,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
+  "colors" : [ "Yellow", "White" ],
+  "name" : "Disciple",
+  "mana" : 1,
+  "health" : 4,
+  "attackDamage" : 0,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+  "colors" : [ "Brown", "Blue" ],
+  "name" : "Warden",
+  "mana" : 2,
+  "health" : 5,
+  "attackDamage" : 7,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : true
+}, {
+  "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+  "colors" : [ "Red", "Purple" ],
+  "name" : "Goliath",
+  "mana" : 1,
+  "health" : 8,
+  "attackDamage" : 5,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : true
+}, {
+  "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
+  "colors" : [ "Brown", "Blue" ],
+  "name" : "Warden",
+  "mana" : 2,
+  "health" : 5,
+  "attackDamage" : 7,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : true
+}, {
+  "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
+  "colors" : [ "White", "Blue" ],
+  "name" : "Winterfell",
+  "mana" : 2
+}, {
+  "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
+  "colors" : [ "Red", "Purple" ],
+  "name" : "Goliath",
+  "mana" : 1,
+  "health" : 7,
+  "attackDamage" : 4,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : true
+} ] ]

@@ -1,1 +1,72 @@
-[ ]
+[ [ {
+  "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+  "colors" : [ "Black", "White" ],
+  "name" : "Sentinel",
+  "mana" : 1,
+  "health" : 2,
+  "attackDamage" : 2,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+  "colors" : [ "Black", "White" ],
+  "name" : "Sentinel",
+  "mana" : 2,
+  "health" : 3,
+  "attackDamage" : 2,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
+  "colors" : [ "Black", "White" ],
+  "name" : "Sentinel",
+  "mana" : 1,
+  "health" : 3,
+  "attackDamage" : 1,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Premium card: The fury of hell is upon us, please kill us.",
+  "colors" : [ "Red", "Yellow" ],
+  "name" : "Firestorm",
+  "mana" : 1
+}, {
+  "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+  "colors" : [ "Red", "Purple" ],
+  "name" : "Goliath",
+  "mana" : 4,
+  "health" : 8,
+  "attackDamage" : 1,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : true
+}, {
+  "description" : "Standard card: Death incarnate. No better time to die than now.",
+  "colors" : [ "Black", "Yellow" ],
+  "name" : "The Ripper",
+  "mana" : 4,
+  "health" : 4,
+  "attackDamage" : 5,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+  "colors" : [ "Red", "Purple" ],
+  "name" : "Goliath",
+  "mana" : 3,
+  "health" : 7,
+  "attackDamage" : 2,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : true
+} ] ]

@@ -1,1 +1,72 @@
-[ ]
+[ [ {
+  "description" : "Standard card: Death incarnate. No better time to die than now.",
+  "colors" : [ "Orange", "Red", "Black" ],
+  "name" : "The Ripper",
+  "mana" : 3,
+  "health" : 4,
+  "attackDamage" : 5,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
+  "colors" : [ "Black", "White", "Green" ],
+  "name" : "Warden",
+  "mana" : 2,
+  "health" : 6,
+  "attackDamage" : 3,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : true
+}, {
+  "description" : "Premium card: Nobody suspects an outcast, not even the Gods.",
+  "colors" : [ "Black", "White", "Red" ],
+  "name" : "The Cursed One",
+  "mana" : 2,
+  "health" : 3,
+  "attackDamage" : 0,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
+  "colors" : [ "Black", "White" ],
+  "name" : "Sentinel",
+  "mana" : 2,
+  "health" : 2,
+  "attackDamage" : 1,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
+  "colors" : [ "Purple", "Yellow" ],
+  "name" : "Berserker",
+  "mana" : 2,
+  "health" : 1,
+  "attackDamage" : 2,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Standard card: The dragon was unleashed, run for your lives.",
+  "colors" : [ "Blue", "Green", "White" ],
+  "name" : "Firestorm",
+  "mana" : 1
+}, {
+  "description" : "Premium card: Fear him. Your last breath is now.",
+  "colors" : [ "Purple", "Yellow" ],
+  "name" : "Berserker",
+  "mana" : 2,
+  "health" : 1,
+  "attackDamage" : 2,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+} ] ]

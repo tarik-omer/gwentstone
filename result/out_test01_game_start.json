@@ -1,1 +1,50 @@
-[ ]
+[ [ {
+  "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+  "colors" : [ "Red", "Purple" ],
+  "name" : "Goliath",
+  "mana" : 4,
+  "health" : 7,
+  "attackDamage" : 1,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : true
+}, {
+  "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
+  "colors" : [ "White", "Grey", "Black" ],
+  "name" : "Winterfell",
+  "mana" : 1
+}, {
+  "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
+  "colors" : [ "Yellow", "White" ],
+  "name" : "Disciple",
+  "mana" : 3,
+  "health" : 4,
+  "attackDamage" : 0,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+  "colors" : [ "Black", "White" ],
+  "name" : "Sentinel",
+  "mana" : 2,
+  "health" : 3,
+  "attackDamage" : 2,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
+  "colors" : [ "Yellow", "White" ],
+  "name" : "Disciple",
+  "mana" : 2,
+  "health" : 4,
+  "attackDamage" : 0,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+} ] ]

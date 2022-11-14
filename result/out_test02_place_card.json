@@ -1,1 +1,72 @@
-[ ]
+[ [ {
+  "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
+  "colors" : [ "Yellow", "White" ],
+  "name" : "Disciple",
+  "mana" : 2,
+  "health" : 2,
+  "attackDamage" : 0,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
+  "colors" : [ "White", "Grey", "Black" ],
+  "name" : "Winterfell",
+  "mana" : 2
+}, {
+  "description" : "Premium card: Fear him. Your last breath is now.",
+  "colors" : [ "Red", "Blue", "Pink" ],
+  "name" : "Berserker",
+  "mana" : 1,
+  "health" : 2,
+  "attackDamage" : 3,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
+  "colors" : [ "Black", "White" ],
+  "name" : "Sentinel",
+  "mana" : 1,
+  "health" : 2,
+  "attackDamage" : 1,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Premium card: Fear him. Your last breath is now.",
+  "colors" : [ "Purple", "Yellow" ],
+  "name" : "Berserker",
+  "mana" : 1,
+  "health" : 2,
+  "attackDamage" : 3,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
+  "colors" : [ "Black", "White", "Red" ],
+  "name" : "The Cursed One",
+  "mana" : 3,
+  "health" : 1,
+  "attackDamage" : 0,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : false
+}, {
+  "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+  "colors" : [ "Black", "White", "Green" ],
+  "name" : "Warden",
+  "mana" : 3,
+  "health" : 5,
+  "attackDamage" : 3,
+  "ableToAttack" : true,
+  "frozen" : false,
+  "dead" : false,
+  "tank" : true
+} ] ]

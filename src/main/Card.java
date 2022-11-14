@@ -1,10 +1,14 @@
 package main;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import fileio.CardInput;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class Card {
 
     private String description;
@@ -58,7 +62,7 @@ public abstract class Card {
     }
 
 }
-
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 class MinionCard extends Card {
     private int health;
 
