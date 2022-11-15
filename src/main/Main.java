@@ -71,6 +71,8 @@ public final class Main {
 
         //TODO add here the entry point to your implementation
 
+        System.out.println("-----------------------------------------------------------------------------------");
+
         RunningGame runningGame = new RunningGame(inputData, output);
         runningGame.runGame();
 

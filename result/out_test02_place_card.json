@@ -1,72 +1,121 @@
-[ [ {
-  "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
-  "colors" : [ "Yellow", "White" ],
-  "name" : "Disciple",
-  "mana" : 2,
-  "health" : 2,
-  "attackDamage" : 0,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
+[ {
+  "command" : "getCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ {
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "White" ],
+    "name" : "Sentinel",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 1
+  }, {
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "colors" : [ "Red", "Blue", "Pink" ],
+    "name" : "Berserker",
+    "mana" : 1,
+    "health" : 1,
+    "attackDamage" : 2
+  } ]
 }, {
-  "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
-  "colors" : [ "White", "Grey", "Black" ],
-  "name" : "Winterfell",
-  "mana" : 2
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
+    "colors" : [ "White", "Grey", "Black" ],
+    "name" : "Winterfell",
+    "mana" : 2
+  } ]
 }, {
-  "description" : "Premium card: Fear him. Your last breath is now.",
-  "colors" : [ "Red", "Blue", "Pink" ],
-  "name" : "Berserker",
-  "mana" : 1,
-  "health" : 2,
-  "attackDamage" : 3,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
+  "command" : "getPlayerTurn",
+  "output" : 2
 }, {
-  "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
-  "colors" : [ "Black", "White" ],
-  "name" : "Sentinel",
-  "mana" : 1,
-  "health" : 2,
-  "attackDamage" : 1,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
+  "command" : "getCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ {
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "White" ],
+    "name" : "Sentinel",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 1
+  }, {
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "colors" : [ "Red", "Blue", "Pink" ],
+    "name" : "Berserker",
+    "mana" : 1,
+    "health" : 1,
+    "attackDamage" : 2
+  } ]
 }, {
-  "description" : "Premium card: Fear him. Your last breath is now.",
-  "colors" : [ "Purple", "Yellow" ],
-  "name" : "Berserker",
-  "mana" : 1,
-  "health" : 2,
-  "attackDamage" : 3,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
+    "colors" : [ "White", "Grey", "Black" ],
+    "name" : "Winterfell",
+    "mana" : 2
+  } ]
 }, {
-  "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
-  "colors" : [ "Black", "White", "Red" ],
-  "name" : "The Cursed One",
-  "mana" : 3,
-  "health" : 1,
-  "attackDamage" : 0,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
+  "command" : "getPlayerTurn",
+  "output" : 2
 }, {
-  "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
-  "colors" : [ "Black", "White", "Green" ],
-  "name" : "Warden",
-  "mana" : 3,
-  "health" : 5,
-  "attackDamage" : 3,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : true
-} ] ]
+  "command" : "getPlayerMana",
+  "playerIdx" : 2,
+  "output" : 9
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 1,
+  "output" : 11
+}, {
+  "command" : "getPlayerTurn",
+  "output" : 2
+}, {
+  "command" : "getCardsOnTable"
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ {
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "White" ],
+    "name" : "Sentinel",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 1
+  }, {
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "colors" : [ "Red", "Blue", "Pink" ],
+    "name" : "Berserker",
+    "mana" : 1,
+    "health" : 1,
+    "attackDamage" : 2
+  } ]
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
+    "colors" : [ "White", "Grey", "Black" ],
+    "name" : "Winterfell",
+    "mana" : 2
+  } ]
+}, {
+  "command" : "getPlayerDeck",
+  "playerIdx" : 2,
+  "output" : [ {
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound",
+    "mana" : 2
+  } ]
+}, {
+  "command" : "getPlayerDeck",
+  "playerIdx" : 1,
+  "output" : [ {
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "colors" : [ "Red", "Blue", "Pink" ],
+    "name" : "Berserker",
+    "mana" : 1,
+    "health" : 2,
+    "attackDamage" : 3
+  } ]
+} ]

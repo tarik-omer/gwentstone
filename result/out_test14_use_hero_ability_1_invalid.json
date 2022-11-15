@@ -4,20 +4,20 @@
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
-  "output" : 15
+  "output" : 22
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
-  "output" : 16
+  "output" : 21
 }, {
   "command" : "getCardsOnTable"
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
-    "description" : "Premium card: All is white. My mouth is frozen and I must scream.",
-    "colors" : [ "White", "Blue" ],
-    "name" : "Winterfell",
+    "description" : "Standard card: The dragon was unleashed, run for your lives.",
+    "colors" : [ "Red", "Yellow" ],
+    "name" : "Firestorm",
     "mana" : 2
   } ]
 }, {
@@ -25,7 +25,7 @@
   "playerIdx" : 1,
   "output" : [ {
     "description" : "Premium card: The fury of hell is upon us, please kill us.",
-    "colors" : [ "Blue", "Green", "White" ],
+    "colors" : [ "Red", "Yellow" ],
     "name" : "Firestorm",
     "mana" : 1
   } ]

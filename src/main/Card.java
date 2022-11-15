@@ -3,12 +3,12 @@ package main;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fileio.CardInput;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class Card {
 
     private String description;
@@ -62,17 +62,15 @@ public abstract class Card {
     }
 
 }
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 class MinionCard extends Card {
     private int health;
-
     private int attackDamage;
-
-    private boolean isFrozen = false;
-
-    private boolean ableToAttack = true;
-
-    private boolean isTank = false;
+    @JsonIgnore
+    private boolean isFrozen;
+    @JsonIgnore
+    private boolean ableToAttack;
+    @JsonIgnore
+    private boolean isTank;
 
     public MinionCard() {
 
@@ -87,18 +85,18 @@ class MinionCard extends Card {
             isTank = true;
         }
     }
-
+    @JsonIgnore
     public boolean isDead() {
         if (this.health <= 0)
             return true;
         else
             return false;
     }
-
+    @JsonIgnore
     public boolean isTank() {
         return isTank;
     }
-
+    @JsonIgnore
     public void setTank(boolean tank) {
         isTank = tank;
     }
@@ -123,11 +121,11 @@ class MinionCard extends Card {
     public void setHealth(int health) {
         this.health = health;
     }
-
+    @JsonIgnore
     public boolean isFrozen() {
         return isFrozen;
     }
-
+    @JsonIgnore
     public void setFrozen(boolean frozen) {
         isFrozen = frozen;
     }
@@ -302,16 +300,14 @@ class HeartHoundEnvironmentCard extends Card {
 }
 
 class HeroCard extends Card {
-    private int health = 30;
-
-    private int attackDamage;
+    private int health;
 
     public HeroCard() {
 
     }
     public HeroCard(CardInput rawCard) {
         super(rawCard.getName(), rawCard.getMana(), rawCard.getDescription(), rawCard.getColors());
-        this.attackDamage = rawCard.getAttackDamage();
+        this.setHealth(30);
     }
 
     public int getHealth() {
@@ -322,21 +318,11 @@ class HeroCard extends Card {
         this.health = health;
     }
 
-    public int getAttackDamage() {
-        return attackDamage;
-    }
-
-    public void setAttackDamage(int attackDamage) {
-        this.attackDamage = attackDamage;
-    }
-
     @Override
     public String toString() {
         return "{"
                 +  "mana="
                 + this.getMana()
-                +  ", attackDamage="
-                + attackDamage
                 + ", health="
                 + health
                 +  ", description='"

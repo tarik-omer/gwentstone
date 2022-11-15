@@ -1,66 +1,75 @@
-[ [ {
-  "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
-  "colors" : [ "Black", "White" ],
-  "name" : "Sentinel",
-  "mana" : 1,
-  "health" : 3,
-  "attackDamage" : 1,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
+[ {
+  "command" : "placeCard",
+  "error" : "Cannot place environment card on table.",
+  "handIdx" : 0
 }, {
-  "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
-  "colors" : [ "Red", "Blue", "Pink" ],
-  "name" : "Berserker",
-  "mana" : 2,
-  "health" : 1,
-  "attackDamage" : 2,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
+  "command" : "placeCard",
+  "error" : "Cannot place environment card on table.",
+  "handIdx" : 0
 }, {
-  "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
-  "colors" : [ "White", "Blue" ],
-  "name" : "Winterfell",
-  "mana" : 1
+  "command" : "getPlayerMana",
+  "playerIdx" : 1,
+  "output" : 18
 }, {
-  "description" : "Premium card: Nobody suspects an outcast, not even the Gods.",
-  "colors" : [ "Pink", "Purple" ],
-  "name" : "The Cursed One",
-  "mana" : 3,
-  "health" : 1,
-  "attackDamage" : 0,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
+  "command" : "getPlayerMana",
+  "playerIdx" : 2,
+  "output" : 17
 }, {
-  "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
-  "colors" : [ "Black", "White", "Red" ],
-  "name" : "The Cursed One",
-  "mana" : 3,
-  "health" : 1,
-  "attackDamage" : 0,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
+  "command" : "getCardsOnTable"
 }, {
-  "description" : "Premium card: All is white. My mouth is frozen and I must scream.",
-  "colors" : [ "White", "Grey", "Black" ],
-  "name" : "Winterfell",
-  "mana" : 1
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
+    "colors" : [ "White", "Blue" ],
+    "name" : "Winterfell",
+    "mana" : 1
+  }, {
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "colors" : [ "Red", "Blue", "Pink" ],
+    "name" : "Berserker",
+    "mana" : 1,
+    "health" : 1,
+    "attackDamage" : 2
+  }, {
+    "description" : "Premium card: All is white. My mouth is frozen and I must scream.",
+    "colors" : [ "White", "Grey", "Black" ],
+    "name" : "Winterfell",
+    "mana" : 1
+  }, {
+    "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
+    "colors" : [ "Black", "White", "Red" ],
+    "name" : "The Cursed One",
+    "mana" : 3,
+    "health" : 1,
+    "attackDamage" : 0
+  } ]
 }, {
-  "description" : "Premium card: Fear him. Your last breath is now.",
-  "colors" : [ "Red", "Blue", "Pink" ],
-  "name" : "Berserker",
-  "mana" : 1,
-  "health" : 1,
-  "attackDamage" : 2,
-  "ableToAttack" : true,
-  "frozen" : false,
-  "dead" : false,
-  "tank" : false
-} ] ]
+  "command" : "getCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ {
+    "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
+    "colors" : [ "White", "Grey", "Black" ],
+    "name" : "Winterfell",
+    "mana" : 2
+  }, {
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "Grey", "Blue" ],
+    "name" : "Sentinel",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 1
+  }, {
+    "description" : "Standard card: The dragon was unleashed, run for your lives.",
+    "colors" : [ "Blue", "Green", "White" ],
+    "name" : "Firestorm",
+    "mana" : 2
+  }, {
+    "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
+    "colors" : [ "Green", "Yellow", "Blue" ],
+    "name" : "Disciple",
+    "mana" : 3,
+    "health" : 2,
+    "attackDamage" : 0
+  } ]
+} ]

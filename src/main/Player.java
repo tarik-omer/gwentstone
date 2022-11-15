@@ -20,8 +20,7 @@ public class Player {
         this.playerHand = new LinkedList<>();
         this.playerCurrentDeck = Player.processDeck(playerRawDeck, shuffleSeed);
         this.mana = mana;
-        // TODO: implement hero choice
-        this.heroCard = null;
+        this.heroCard = Player.processHero(heroCard);
     }
 
     public int useManaOnCard (Card usedCard) {
@@ -65,13 +64,23 @@ public class Player {
         this.playerCurrentDeck = playerCurrentDeck;
     }
 
+    public void addMana (int addedMana) {
+        this.setMana(this.getMana() + addedMana);
+    }
+
+    public void useMana (int usedMana) {
+        this.setMana(this.getMana() - usedMana);
+        if (this.getMana() < 0)
+            System.out.println("Error - somewhere you let mana turn to negative values.");
+    }
+
     public static LinkedList<Card> processDeck(ArrayList<CardInput> rawDeck, int shuffleSeed) {
         LinkedList<Card> processedDeck = new LinkedList<>();
 
         for (CardInput rawCard : rawDeck) {
             Card processedCard;
 
-            // if card has certain name, make it object of said class
+            // if card has certain name, make it object of said type
             if (rawCard.getName().equals("Goliath") || rawCard.getName().equals("Warden") ||
                     rawCard.getName().equals("Sentinel") || rawCard.getName().equals("Berserker")) {
                 processedCard = new MinionCard(rawCard);
@@ -102,12 +111,28 @@ public class Player {
             }
         }
 
-        // list is reversed, bring order of cards to normal
-        Collections.reverse(processedDeck);
         // shuffle order of cards, based on seed
         Random random = new Random(shuffleSeed);
         Collections.shuffle(processedDeck, random);
 
         return processedDeck;
+    }
+
+    public static HeroCard processHero(CardInput rawHero) {
+        HeroCard heroCard;
+
+        // based on hero name, create corresponding hero object
+        if (rawHero.getName().equals("Lord Royce")) {
+            heroCard = new LordRoyce(rawHero);
+        } else if (rawHero.getName().equals("Empress Thorina")) {
+            heroCard = new EmpressThorina(rawHero);
+        } else if (rawHero.getName().equals("King Mudface")) {
+            heroCard = new KingMudface(rawHero);
+        } else if (rawHero.getName().equals("General Kocioraw")) {
+            heroCard = new GeneralKocioraw(rawHero);
+        } else {
+            heroCard = null;
+        }
+        return heroCard;
     }
 }
