@@ -11,18 +11,35 @@
     "attackDamage" : 1
   }
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 3,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "White" ],
+    "name" : "Sentinel",
+    "mana" : 1,
+    "health" : 2,
+    "attackDamage" : 2
+  }
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 3,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "White" ],
+    "name" : "Sentinel",
+    "mana" : 1,
+    "health" : 2,
+    "attackDamage" : 2
+  }
 }, {
   "command" : "getCardAtPosition",
   "x" : 0,

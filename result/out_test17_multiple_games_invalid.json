@@ -18,10 +18,17 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "colors" : [ "Orange", "Red", "Black" ],
+    "name" : "The Ripper",
+    "mana" : 1,
+    "health" : 4,
+    "attackDamage" : 6
+  }
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
@@ -34,6 +41,9 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 2,
   "output" : [ ]
@@ -43,12 +53,7 @@
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
-  "output" : [ {
-    "description" : "Premium card: The fury of hell is upon us, please kill us.",
-    "colors" : [ "Red", "Yellow" ],
-    "name" : "Firestorm",
-    "mana" : 2
-  } ]
+  "output" : [ ]
 }, {
   "command" : "getCardAtPosition",
   "x" : 0,
@@ -62,22 +67,19 @@
     "attackDamage" : 5
   }
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
   "output" : 1
 }, {
-  "command" : "placeCard",
-  "error" : "Cannot place environment card on table.",
-  "handIdx" : 0
-}, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
-  "output" : [ {
-    "description" : "Premium card: The fury of hell is upon us, please kill us.",
-    "colors" : [ "Red", "Yellow" ],
-    "name" : "Firestorm",
-    "mana" : 2
-  } ]
+  "output" : [ ]
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
@@ -115,7 +117,14 @@
     "mana" : 1,
     "health" : 4,
     "attackDamage" : 6
-  } ], [ ] ]
+  } ], [ {
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "colors" : [ "Purple", "Yellow" ],
+    "name" : "Berserker",
+    "mana" : 2,
+    "health" : 1,
+    "attackDamage" : 5
+  } ] ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
@@ -124,18 +133,6 @@
   "command" : "getCardsInHand",
   "playerIdx" : 1,
   "output" : [ {
-    "description" : "Premium card: The fury of hell is upon us, please kill us.",
-    "colors" : [ "Red", "Yellow" ],
-    "name" : "Firestorm",
-    "mana" : 2
-  }, {
-    "description" : "Premium card: Fear him. Your last breath is now.",
-    "colors" : [ "Purple", "Yellow" ],
-    "name" : "Berserker",
-    "mana" : 2,
-    "health" : 1,
-    "attackDamage" : 5
-  }, {
     "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
     "colors" : [ "Yellow", "White" ],
     "name" : "Disciple",
@@ -160,6 +157,12 @@
     "mana" : 2
   } ]
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
@@ -167,15 +170,25 @@
   "playerIdx" : 1,
   "output" : 1
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 1,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
+    "colors" : [ "Yellow", "Orange", "Red" ],
+    "name" : "Miraj",
+    "mana" : 1,
+    "health" : 3,
+    "attackDamage" : 5
+  }
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
   "output" : 3
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
@@ -188,14 +201,24 @@
     "mana" : 2
   } ]
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Brown", "Blue" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 6,
+    "attackDamage" : 7
+  }
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
-  "output" : 2
+  "output" : 0
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 2,
@@ -206,27 +229,28 @@
     "mana" : 2
   } ]
 }, {
-  "command" : "placeCard",
-  "error" : "Cannot place environment card on table.",
-  "handIdx" : 0
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Brown", "Blue" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 6,
+    "attackDamage" : 7
+  }
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
-  "output" : [ {
-    "description" : "Standard card: The dragon was unleashed, run for your lives.",
-    "colors" : [ "Red", "Yellow" ],
-    "name" : "Firestorm",
-    "mana" : 2
-  } ]
+  "output" : [ ]
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
-  "output" : 6
+  "output" : 2
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
@@ -240,10 +264,17 @@
     "mana" : 2
   } ]
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Brown", "Blue" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 6,
+    "attackDamage" : 7
+  }
 }, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
@@ -288,15 +319,6 @@
     "mana" : 2,
     "health" : 3,
     "attackDamage" : 6
-  } ] ]
-}, {
-  "command" : "getCardsInHand",
-  "playerIdx" : 1,
-  "output" : [ {
-    "description" : "Standard card: The dragon was unleashed, run for your lives.",
-    "colors" : [ "Red", "Yellow" ],
-    "name" : "Firestorm",
-    "mana" : 2
   }, {
     "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
     "colors" : [ "Black", "Grey", "Blue" ],
@@ -304,7 +326,11 @@
     "mana" : 2,
     "health" : 3,
     "attackDamage" : 5
-  }, {
+  } ] ]
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
     "description" : "Premium card: All is white. My mouth is frozen and I must scream.",
     "colors" : [ "White", "Grey", "Black" ],
     "name" : "Winterfell",

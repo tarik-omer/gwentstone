@@ -11,10 +11,20 @@
     "attackDamage" : 6
   }
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Brown", "Blue" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 5,
+    "attackDamage" : 8
+  }
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerTurn",
   "output" : 1

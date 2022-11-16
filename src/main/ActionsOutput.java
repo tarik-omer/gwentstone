@@ -109,7 +109,6 @@ class GetTableCards extends ActionsOutput {
         this.output.add(new LinkedList<>(table.get(1)));
         this.output.add(new LinkedList<>(table.get(2)));
         this.output.add(new LinkedList<>(table.get(3)));
-
     }
 
     public LinkedList<LinkedList<MinionCard>> getOutput() {
@@ -387,9 +386,9 @@ class UseEnvironmentCard extends ActionsOutput {
         this.handIdx = handIdx;
 
         // check whether card is environment card, player has enough mana and affected row is enemy's row
-        if (playerTurn == 1 && MinionCard.correspondingRow(playerOne.getPlayerHand().get(handIdx)) != 0) {
+        if (playerTurn == 1 && Card.correspondingRow(playerOne.getPlayerHand().get(handIdx)) != 0) {
             this.setError("Chosen card is not of type environment.");
-        } else if (playerTurn == 2 && MinionCard.correspondingRow(playerTwo.getPlayerHand().get(handIdx)) != 0) {
+        } else if (playerTurn == 2 && Card.correspondingRow(playerTwo.getPlayerHand().get(handIdx)) != 0) {
             this.setError("Chosen card is not of type environment.");
         } else if (playerTurn == 1 && playerOne.getMana() < playerOne.getPlayerHand().get(handIdx).getMana()) {
             this.setError("Not enough mana to use environment card.");
@@ -402,7 +401,7 @@ class UseEnvironmentCard extends ActionsOutput {
         } else if (playerTurn == 1) {
             Card environmentCard = playerOne.getPlayerHand().get(handIdx);
             if (environmentCard.getName().equals("Firestorm")) {
-                ((FirestormEnvironmentCard)environmentCard).firestormEffect(table.get(affectedRow));
+//                ((FirestormEnvironmentCard)environmentCard).firestormEffect(table.get(affectedRow));
             } else if (environmentCard.getName().equals("Winterfell")) {
                 ((WinterfellEnvironmentCard)environmentCard).winterfellEffect(table.get(affectedRow));
             } else if (environmentCard.getName().equals("Heart Hound")) {

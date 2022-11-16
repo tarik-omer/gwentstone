@@ -1,8 +1,15 @@
 [ {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "colors" : [ "Red", "Purple" ],
+    "name" : "Goliath",
+    "mana" : 1,
+    "health" : 8,
+    "attackDamage" : 5
+  }
 }, {
   "command" : "getPlayerHero",
   "playerIdx" : 1,
@@ -27,11 +34,6 @@
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
-    "description" : "Premium card: All is white. My mouth is frozen and I must scream.",
-    "colors" : [ "White", "Grey", "Black" ],
-    "name" : "Winterfell",
-    "mana" : 2
-  }, {
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "colors" : [ "Red", "Black" ],
     "name" : "Miraj",
@@ -42,14 +44,10 @@
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
-  "output" : 7
+  "output" : 5
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
-}, {
-  "command" : "placeCard",
-  "error" : "Cannot place environment card on table.",
-  "handIdx" : 0
 }, {
   "command" : "getCardAtPosition",
   "x" : 0,
@@ -83,13 +81,9 @@
     "health" : 30
   }
 }, {
-  "command" : "placeCard",
-  "error" : "Cannot place environment card on table.",
-  "handIdx" : 0
-}, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
-  "output" : 18
+  "output" : 14
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
@@ -103,6 +97,13 @@
     "mana" : 1,
     "health" : 3,
     "attackDamage" : 6
+  }, {
+    "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
+    "colors" : [ "Purple", "Yellow" ],
+    "name" : "Berserker",
+    "mana" : 1,
+    "health" : 1,
+    "attackDamage" : 5
   } ], [ {
     "description" : "Premium card: Insanity is always an option, now it is an absolute.",
     "colors" : [ "Red", "Black" ],
@@ -110,6 +111,13 @@
     "mana" : 2,
     "health" : 4,
     "attackDamage" : 5
+  }, {
+    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
+    "colors" : [ "Red", "Black" ],
+    "name" : "Miraj",
+    "mana" : 1,
+    "health" : 3,
+    "attackDamage" : 6
   } ], [ {
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "colors" : [ "Red", "Purple" ],
@@ -143,25 +151,6 @@
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
-    "description" : "Premium card: All is white. My mouth is frozen and I must scream.",
-    "colors" : [ "White", "Grey", "Black" ],
-    "name" : "Winterfell",
-    "mana" : 2
-  }, {
-    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
-    "colors" : [ "Red", "Black" ],
-    "name" : "Miraj",
-    "mana" : 1,
-    "health" : 3,
-    "attackDamage" : 6
-  }, {
-    "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
-    "colors" : [ "Purple", "Yellow" ],
-    "name" : "Berserker",
-    "mana" : 1,
-    "health" : 1,
-    "attackDamage" : 5
-  }, {
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "colors" : [ "Red", "Purple" ],
     "name" : "Goliath",

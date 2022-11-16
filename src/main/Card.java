@@ -89,7 +89,6 @@ class MinionCard extends Card {
     public MinionCard() {
 
     }
-
     public MinionCard(CardInput rawCard) {
         super(rawCard.getName(), rawCard.getMana(), rawCard.getDescription(), rawCard.getColors());
         this.health = rawCard.getHealth();
@@ -98,6 +97,10 @@ class MinionCard extends Card {
         if (this.getName().equals("Warden") || this.getName().equals("Goliath")) {
             isTank = true;
         }
+    }
+
+    public void loseHealth(int lostHealth) {
+        this.health = this.health - lostHealth;
     }
 
     @JsonIgnore
@@ -220,7 +223,10 @@ class FirestormEnvironmentCard extends Card {
     void firestormEffect(LinkedList<MinionCard> cards) {
         // deal damage to all cards
         for (MinionCard card : cards) {
-            card.setHealth(card.getHealth() - 1);
+            card.loseHealth(1);
+            if (card.isDead()) {
+                cards.remove(cards.indexOf(card));
+            }
         }
     }
     @Override

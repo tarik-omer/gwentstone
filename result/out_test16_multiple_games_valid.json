@@ -7,6 +7,9 @@
   "playerIdx" : 1,
   "output" : [ ]
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
@@ -38,6 +41,9 @@
   "playerIdx" : 1,
   "output" : [ ]
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
@@ -49,6 +55,9 @@
     "name" : "Firestorm",
     "mana" : 1
   } ]
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
@@ -152,10 +161,20 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
-  "command" : "getCardPosition",
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Brown", "Blue" ],
+    "name" : "Warden",
+    "mana" : 1,
+    "health" : 5,
+    "attackDamage" : 7
+  }
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
@@ -170,10 +189,17 @@
     "mana" : 1
   } ]
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Brown", "Blue" ],
+    "name" : "Warden",
+    "mana" : 1,
+    "health" : 5,
+    "attackDamage" : 7
+  }
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
@@ -181,6 +207,9 @@
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getCardAtPosition",
   "x" : 0,
@@ -194,10 +223,23 @@
     "attackDamage" : 0
   }
 }, {
-  "command" : "getCardPosition",
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Brown", "Blue" ],
+    "name" : "Warden",
+    "mana" : 1,
+    "health" : 5,
+    "attackDamage" : 7
+  }
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,

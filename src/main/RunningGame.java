@@ -37,6 +37,8 @@ public class RunningGame {
         int playerTwoWins = 0;
         int currentGame = 1;
 
+        GameInfo gameInfo = new GameInfo(0, 1, 0, 0, 1, 1);
+
         for (GameInput game : games) {
             // initialize empty table
             ArrayList<LinkedList<MinionCard>> table = new ArrayList<>();
@@ -56,70 +58,51 @@ public class RunningGame {
                     1, game.getStartGame().getPlayerTwoHero(), game.getStartGame().getShuffleSeed());
 
             // integer to keep track of whose turn it is
-            int playerTurn = game.getStartGame().getStartingPlayer();
+            gameInfo.setPlayerTurn(game.getStartGame().getStartingPlayer());
 
             // counter for rounds
-            int currentRound = 1;
+            gameInfo.setCurrentRound(1);
 
             // multiplier for mana gain of each player, each round
-            int playerManaGain = 1;
+            gameInfo.setPlayerManaGain(1);
 
             // each player starts with one card in hand
             playerOne.getPlayerHand().addLast(playerOne.getPlayerCurrentDeck().removeFirst());
             playerTwo.getPlayerHand().addLast(playerTwo.getPlayerCurrentDeck().removeFirst());
+
+            DebuggingCommands debuggingCommands = new DebuggingCommands(table, playerOne, playerTwo, output, gameInfo);
+            PlayerCommands playerCommands = new PlayerCommands(table, playerOne, playerTwo, output, gameInfo);
 
             for (ActionsInput command : actionsInput) {
                 // process each command
                 switch (command.getCommand()) {
                     // debugging commands
                     case "getCardsInHand":
-                        GetPlayerHand getPlayerHand = new GetPlayerHand(command.getPlayerIdx(),
-                                playerOne, playerTwo);
-                        output.addPOJO(getPlayerHand);
+                        debuggingCommands.getCardsInHand(command);
                         break;
                     case "getPlayerDeck":
-                        GetPlayerDeck getPlayerDeck = new GetPlayerDeck(command.getPlayerIdx(),
-                                playerOne, playerTwo);
-                        output.addPOJO(getPlayerDeck);
+                        debuggingCommands.getPlayerDeck(command);
                         break;
                     case "getCardsOnTable":
-                        GetTableCards getTableCards = new GetTableCards(table);
-                        output.addPOJO(getTableCards);
+                        debuggingCommands.getCardsOnTable(command);
                         break;
                     case "getPlayerTurn":
-                        GetPlayerTurn getPlayerTurn = new GetPlayerTurn(playerTurn);
-                        output.addPOJO(getPlayerTurn);
+                        debuggingCommands.getPlayerTurn(command);
                         break;
                     case "getPlayerHero":
-                        GetPlayerHero getPlayerHero = new GetPlayerHero(command.getPlayerIdx(), playerOne, playerTwo);
-                        output.addPOJO(getPlayerHero);
+                        debuggingCommands.getPlayerHero(command);
                         break;
                     case "getCardAtPosition":
-                        GetCardPosition getCardPosition = new GetCardPosition(command.getX(), command.getY(), table);
-                        if (getCardPosition.getOutput() == null) {
-                            // case: no card at given coordinates
-                            ObjectMapper objectMapper = new ObjectMapper();
-                            ObjectNode objectNode = objectMapper.createObjectNode();
-                            objectNode.put("command", "getCardPosition");
-                            objectNode.put("x", command.getX());
-                            objectNode.put("y", command.getY());
-                            objectNode.put("output", "No card at that position.");
-                            output.addPOJO(objectNode);
-                        } else {
-                            // case: card found
-                            output.addPOJO(getCardPosition);
-                        }
+                        debuggingCommands.getCardAtPosition(command);
                         break;
                     case "getPlayerMana":
-                        GetPlayerMana getPlayerMana = new GetPlayerMana(playerOne, playerTwo, command.getPlayerIdx());
-                        output.addPOJO(getPlayerMana);
+                        debuggingCommands.getPlayerMana(command);
                         break;
                     case "getEnvironmentCardsInHand":
-                        GetEnvironmentCardsInHand getEnvironmentCardsInHand = new
-                                GetEnvironmentCardsInHand(command.getPlayerIdx(), playerOne, playerTwo);
-                        output.addPOJO(getEnvironmentCardsInHand);
+                        debuggingCommands.getEnvironmentCardsInHand(command);
                         break;
                     case "getFrozenCardsOnTable":
+                        debuggingCommands.getFrozenCardsOnTable(command);
                         break;
                     // statistics commands
                     case "getTotalGamesPlayed":
@@ -130,13 +113,7 @@ public class RunningGame {
                         break;
                     // player commands
                     case "placeCard":
-                        PlaceCard placeCard = new PlaceCard(command.getHandIdx(),
-                                table, playerTurn, playerOne, playerTwo);
-                        // if error is not null (something went wrong),
-                        // card was not removed from hand, not added to table
-                        if (placeCard.getError() != null) {
-                            output.addPOJO(placeCard);
-                        }
+                        playerCommands.placeCard(command);
                         break;
                     case "cardUsesAttack":
                         break;
@@ -147,30 +124,26 @@ public class RunningGame {
                     case "useHeroAbility":
                         break;
                     case "useEnvironmentCard":
-                        UseEnvironmentCard useEnvironmentCard = new UseEnvironmentCard(command.getHandIdx(),
-                                command.getAffectedRow(), playerOne, playerTwo, table, playerTurn);
-                        if (useEnvironmentCard.getError() != null) {
-                            output.addPOJO(useEnvironmentCard);
-                        }
+                        playerCommands.useEnvironmentCard(command);
                         break;
                     case "endPlayerTurn":
                         // next player
-                        if (playerTurn == 1) {
-                            playerTurn = 2;
-                        } else if (playerTurn == 2) {
-                            playerTurn = 1;
+                        if (gameInfo.getPlayerTurn() == 1) {
+                            gameInfo.setPlayerTurn(2);
+                        } else if (gameInfo.getPlayerTurn() == 2) {
+                            gameInfo.setPlayerTurn(1);
                         }
                         // advance to next round if both players played
-                        if (playerTurn == game.getStartGame().getStartingPlayer()) {
-                            currentRound++;
+                        if (gameInfo.getPlayerTurn() == game.getStartGame().getStartingPlayer()) {
+                            gameInfo.setCurrentRound(gameInfo.getCurrentRound() + 1);
 
                             // increment mana gain
-                            if (playerManaGain < 10)
-                                playerManaGain++;
+                            if (gameInfo.getPlayerManaGain() < 10)
+                                gameInfo.setPlayerManaGain(gameInfo.getPlayerManaGain() + 1);
 
                             // increase mana of each player
-                            playerOne.addMana(playerManaGain);
-                            playerTwo.addMana(playerManaGain);
+                            playerOne.addMana(gameInfo.getPlayerManaGain());
+                            playerTwo.addMana(gameInfo.getPlayerManaGain());
 
                             // grab card from deck if deck is not empty
                             if (playerOne.getPlayerCurrentDeck().size() > 0)
@@ -180,8 +153,6 @@ public class RunningGame {
                         }
 
                         // TODO: Unfreeze frozen cards for the player whose turn ended
-                        // TODO: Implement death by Firestorm
-                        // TODO: Fix useEnvironmentCard and getCardAtPosition
                         break;
                 }
             }

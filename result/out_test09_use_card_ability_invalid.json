@@ -1,26 +1,63 @@
 [ {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: Death incarnate. No better time to die than now.",
+    "colors" : [ "Orange", "Red", "Black" ],
+    "name" : "The Ripper",
+    "mana" : 3,
+    "health" : 4,
+    "attackDamage" : 6
+  }
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
-}, {
-  "command" : "placeCard",
-  "error" : "Cannot place environment card on table.",
-  "handIdx" : 0
+  "output" : {
+    "description" : "Standard card: Death incarnate. No better time to die than now.",
+    "colors" : [ "Orange", "Red", "Black" ],
+    "name" : "The Ripper",
+    "mana" : 3,
+    "health" : 4,
+    "attackDamage" : 6
+  }
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
-    "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
-    "colors" : [ "White", "Grey", "Black" ],
-    "name" : "Winterfell",
-    "mana" : 1
-  }, {
+    "description" : "Premium card: Insanity is always an option, now it is an absolute.",
+    "colors" : [ "Yellow", "Orange", "Red" ],
+    "name" : "Miraj",
+    "mana" : 4,
+    "health" : 4,
+    "attackDamage" : 4
+  } ]
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 2,
+  "output" : 4
+}, {
+  "command" : "getPlayerTurn",
+  "output" : 2
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 1,
+  "output" : 14
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 2,
+  "output" : 11
+}, {
+  "command" : "getCardsOnTable",
+  "output" : [ [ {
+    "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
+    "colors" : [ "Green", "Yellow", "Blue" ],
+    "name" : "Disciple",
+    "mana" : 2,
+    "health" : 2,
+    "attackDamage" : 0
+  } ], [ {
     "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
     "colors" : [ "Red", "Purple" ],
     "name" : "Goliath",
@@ -34,44 +71,21 @@
     "mana" : 4,
     "health" : 4,
     "attackDamage" : 4
-  } ]
-}, {
-  "command" : "getPlayerMana",
-  "playerIdx" : 2,
-  "output" : 8
-}, {
-  "command" : "getPlayerTurn",
-  "output" : 2
-}, {
-  "command" : "placeCard",
-  "error" : "Cannot place environment card on table.",
-  "handIdx" : 0
-}, {
-  "command" : "placeCard",
-  "error" : "Cannot place environment card on table.",
-  "handIdx" : 0
-}, {
-  "command" : "placeCard",
-  "error" : "Cannot place environment card on table.",
-  "handIdx" : 0
-}, {
-  "command" : "getPlayerMana",
-  "playerIdx" : 1,
-  "output" : 14
-}, {
-  "command" : "getPlayerMana",
-  "playerIdx" : 2,
-  "output" : 26
-}, {
-  "command" : "getCardsOnTable",
-  "output" : [ [ {
-    "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
-    "colors" : [ "Green", "Yellow", "Blue" ],
-    "name" : "Disciple",
-    "mana" : 2,
-    "health" : 2,
-    "attackDamage" : 0
-  } ], [ ], [ {
+  }, {
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "colors" : [ "Brown", "Black", "Grey" ],
+    "name" : "Goliath",
+    "mana" : 4,
+    "health" : 7,
+    "attackDamage" : 1
+  }, {
+    "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
+    "colors" : [ "Black", "White", "Green" ],
+    "name" : "Warden",
+    "mana" : 3,
+    "health" : 6,
+    "attackDamage" : 3
+  } ], [ {
     "description" : "Standard card: Death incarnate. No better time to die than now.",
     "colors" : [ "Orange", "Red", "Black" ],
     "name" : "The Ripper",
@@ -127,39 +141,6 @@
   "command" : "getCardsInHand",
   "playerIdx" : 2,
   "output" : [ {
-    "description" : "Standard card: The days are cold and so are we. We hope we can close our eyes again.",
-    "colors" : [ "White", "Grey", "Black" ],
-    "name" : "Winterfell",
-    "mana" : 1
-  }, {
-    "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
-    "colors" : [ "Red", "Purple" ],
-    "name" : "Goliath",
-    "mana" : 3,
-    "health" : 8,
-    "attackDamage" : 1
-  }, {
-    "description" : "Premium card: Insanity is always an option, now it is an absolute.",
-    "colors" : [ "Yellow", "Orange", "Red" ],
-    "name" : "Miraj",
-    "mana" : 4,
-    "health" : 4,
-    "attackDamage" : 4
-  }, {
-    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
-    "colors" : [ "Brown", "Black", "Grey" ],
-    "name" : "Goliath",
-    "mana" : 4,
-    "health" : 7,
-    "attackDamage" : 1
-  }, {
-    "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
-    "colors" : [ "Black", "White", "Green" ],
-    "name" : "Warden",
-    "mana" : 3,
-    "health" : 6,
-    "attackDamage" : 3
-  }, {
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "colors" : [ "Brown", "Black", "Grey" ],
     "name" : "Goliath",

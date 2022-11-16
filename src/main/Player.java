@@ -107,7 +107,7 @@ public class Player {
                 processedCard = new HeartHoundEnvironmentCard(rawCard);
                 processedDeck.add(processedCard);
             } else {
-                System.out.println("Wrong hero");
+                System.out.println("Wrong card.");
             }
         }
 
@@ -131,6 +131,7 @@ public class Player {
         } else if (rawHero.getName().equals("General Kocioraw")) {
             heroCard = new GeneralKocioraw(rawHero);
         } else {
+            System.out.println("Wrong hero");
             heroCard = null;
         }
         return heroCard;

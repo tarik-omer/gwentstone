@@ -1,26 +1,57 @@
 [ {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 1,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "colors" : [ "Black", "Yellow" ],
+    "name" : "The Ripper",
+    "mana" : 3,
+    "health" : 4,
+    "attackDamage" : 6
+  }
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Black", "White", "Green" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 6,
+    "attackDamage" : 2
+  }
+}, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Black", "White", "Green" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 6,
+    "attackDamage" : 2
+  }
 }, {
-  "command" : "getCardPosition",
+  "command" : "getCardAtPosition",
   "x" : 1,
   "y" : 0,
-  "output" : "No card at that position."
+  "output" : {
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "colors" : [ "Black", "Yellow" ],
+    "name" : "The Ripper",
+    "mana" : 3,
+    "health" : 4,
+    "attackDamage" : 6
+  }
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
