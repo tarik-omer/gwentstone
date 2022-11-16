@@ -6,6 +6,13 @@
     "colors" : [ "White", "Grey", "Black" ],
     "name" : "Winterfell",
     "mana" : 1
+  }, {
+    "description" : "Premium card: Insanity is always an option, now it is an absolute.",
+    "colors" : [ "Yellow", "Orange", "Red" ],
+    "name" : "Miraj",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 6
   } ]
 }, {
   "command" : "getPlayerMana",
@@ -14,6 +21,16 @@
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
+}, {
+  "command" : "getCardPosition",
+  "x" : 2,
+  "y" : 0,
+  "output" : "No card at that position."
+}, {
+  "command" : "getCardPosition",
+  "x" : 3,
+  "y" : 0,
+  "output" : "No card at that position."
 }, {
   "command" : "getPlayerHero",
   "playerIdx" : 1,
@@ -42,6 +59,13 @@
     "colors" : [ "White", "Grey", "Black" ],
     "name" : "Winterfell",
     "mana" : 1
+  }, {
+    "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
+    "colors" : [ "Black", "White", "Red" ],
+    "name" : "The Cursed One",
+    "mana" : 1,
+    "health" : 1,
+    "attackDamage" : 0
   } ]
 }, {
   "command" : "getPlayerMana",
@@ -50,6 +74,16 @@
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
+}, {
+  "command" : "getCardPosition",
+  "x" : 3,
+  "y" : 1,
+  "output" : "No card at that position."
+}, {
+  "command" : "getCardPosition",
+  "x" : 2,
+  "y" : 0,
+  "output" : "No card at that position."
 }, {
   "command" : "getPlayerHero",
   "playerIdx" : 1,
@@ -79,7 +113,50 @@
   "playerIdx" : 2,
   "output" : 7
 }, {
-  "command" : "getCardsOnTable"
+  "command" : "getCardsOnTable",
+  "output" : [ [ {
+    "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
+    "colors" : [ "Yellow", "White" ],
+    "name" : "Disciple",
+    "mana" : 1,
+    "health" : 4,
+    "attackDamage" : 0
+  }, {
+    "description" : "Premium card: Nobody suspects an outcast, not even the Gods.",
+    "colors" : [ "Black", "White", "Red" ],
+    "name" : "The Cursed One",
+    "mana" : 1,
+    "health" : 1,
+    "attackDamage" : 0
+  } ], [ {
+    "description" : "Standard card: Death incarnate. No better time to die than now.",
+    "colors" : [ "Orange", "Red", "Black" ],
+    "name" : "The Ripper",
+    "mana" : 1,
+    "health" : 4,
+    "attackDamage" : 5
+  } ], [ {
+    "description" : "Premium card: Insanity is always an option, now it is an absolute.",
+    "colors" : [ "Yellow", "Orange", "Red" ],
+    "name" : "Miraj",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 6
+  } ], [ {
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "Grey", "Blue" ],
+    "name" : "Sentinel",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 6
+  }, {
+    "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
+    "colors" : [ "Black", "White", "Red" ],
+    "name" : "The Cursed One",
+    "mana" : 1,
+    "health" : 1,
+    "attackDamage" : 0
+  } ] ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 1,

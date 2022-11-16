@@ -1,12 +1,7 @@
 package main;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import fileio.CardInput;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -61,9 +56,9 @@ class GetPlayerHand extends ActionsOutput {
         super("getCardsInHand", null);
 
         if (playerIdx == 1) {
-            output = playerOne.getPlayerHand();
+            output = new LinkedList<>(playerOne.getPlayerHand());
         } else if (playerIdx == 2) {
-            output = playerTwo.getPlayerHand();
+            output = new LinkedList<>(playerTwo.getPlayerHand());
         }
         this.playerIdx = playerIdx;
     }
@@ -93,9 +88,9 @@ class GetPlayerDeck extends ActionsOutput {
         super("getPlayerDeck", null);
 
         if (playerIdx == 1) {
-            this.output = playerOne.getPlayerCurrentDeck();
+            this.output = new LinkedList<>(playerOne.getPlayerCurrentDeck());
         } else if (playerIdx == 2) {
-            this.output = playerTwo.getPlayerCurrentDeck();
+            this.output = new LinkedList<>(playerTwo.getPlayerCurrentDeck());
         }
 
         this.playerIdx = playerIdx;
@@ -103,17 +98,26 @@ class GetPlayerDeck extends ActionsOutput {
 }
 
 class GetTableCards extends ActionsOutput {
-    private LinkedList<Card> output;
+    private LinkedList<LinkedList<MinionCard>> output;
 
     public GetTableCards(ArrayList<LinkedList<MinionCard>> table) {
         super("getCardsOnTable", null);
+        // table copy
         this.output = new LinkedList<>();
+        // add each row
+        this.output.add(new LinkedList<>(table.get(0)));
+        this.output.add(new LinkedList<>(table.get(1)));
+        this.output.add(new LinkedList<>(table.get(2)));
+        this.output.add(new LinkedList<>(table.get(3)));
 
-        for (LinkedList<MinionCard> row : table) {
-            for (MinionCard card : row) {
-                this.output.push(card);
-            }
-        }
+    }
+
+    public LinkedList<LinkedList<MinionCard>> getOutput() {
+        return output;
+    }
+
+    public void setOutput(LinkedList<LinkedList<MinionCard>> output) {
+        this.output = output;
     }
 }
 
@@ -169,11 +173,43 @@ class GetPlayerHero extends ActionsOutput {
 class GetCardPosition extends ActionsOutput {
     private int x;
     private int y;
-    private Card output;
+    private MinionCard output;
 
-    public GetCardPosition(String command, String error, int x) {
-        super(command, error);
+    public GetCardPosition(int x, int y, ArrayList<LinkedList<MinionCard>> table) {
+        super("getCardAtPosition", null);
         this.x = x;
+        this.y = y;
+
+        if (table.get(y).size() > x) {
+            this.output = table.get(y).get(x);
+        } else {
+            // no card at this position
+            this.output = null;
+        }
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public MinionCard getOutput() {
+        return output;
+    }
+
+    public void setOutput(MinionCard output) {
+        this.output = output;
     }
 }
 
@@ -213,9 +249,41 @@ class GetEnvironmentCardsInHand extends ActionsOutput {
     private int playerIdx;
     LinkedList<Card> output;
 
-    public GetEnvironmentCardsInHand(String command, String error, int playerIdx) {
-        super(command, error);
+    public GetEnvironmentCardsInHand(int playerIdx, Player playerOne, Player playerTwo) {
+        super("getEnvironmentCardsInHand", null);
         this.playerIdx = playerIdx;
+
+        this.output = new LinkedList<>();
+
+        if (playerIdx == 1) {
+            for (Card card : playerOne.getPlayerHand()) {
+                if (Card.correspondingRow(card) == 0) {
+                    this.output.add(card);
+                }
+            }
+        } else if (playerIdx == 2) {
+            for (Card card : playerTwo.getPlayerHand()) {
+                if (Card.correspondingRow(card) == 0) {
+                    this.output.add(card);
+                }
+            }
+        }
+    }
+
+    public int getPlayerIdx() {
+        return playerIdx;
+    }
+
+    public void setPlayerIdx(int playerIdx) {
+        this.playerIdx = playerIdx;
+    }
+
+    public LinkedList<Card> getOutput() {
+        return output;
+    }
+
+    public void setOutput(LinkedList<Card> output) {
+        this.output = output;
     }
 }
 
@@ -269,29 +337,23 @@ class PlaceCard extends ActionsOutput {
         } else {
             // we consider cards that must be placed on rows 1 and 2 (front rows)
             // check if rows are full
-            if (card.getName().equals("The Ripper") ||
-                card.getName().equals("Miraj") ||
-                card.getName().equals("Goliath") ||
-                card.getName().equals("Warden")) {
+            if (Card.correspondingRow(card) == 1) {
                 if ((playerTurn == 1 && table.get(2).size() == 5) ||
                     (playerTurn == 2 && table.get(1).size() == 5)) {
                     this.setError("Cannot place card on table since row is full.");
                 // if rows are not full, place card on player's front row
                 } else if (playerTurn == 1) {
-                    table.get(2).addLast((MinionCard)playerOne.getPlayerHand().remove(handIdx));
+                    table.get(2).addLast((MinionCard) playerOne.getPlayerHand().remove(handIdx));
                     playerOne.useMana(card.getMana());
                 } else if (playerTurn == 2) {
-                    table.get(1).addLast((MinionCard)playerTwo.getPlayerHand().remove(handIdx));
+                    table.get(1).addLast((MinionCard)(playerTwo.getPlayerHand().remove(handIdx)));
                     playerTwo.useMana(card.getMana());
                 }
             // we consider cards that must be placed on rows 0 and 3 (back rows)
             // check if rows are full
-            } else if (card.getName().equals("Sentinel") ||
-                    card.getName().equals("Berserker") ||
-                    card.getName().equals("The Cursed One") ||
-                    card.getName().equals("Disciple")) {
-                if (playerTurn == 1 && table.get(2).size() == 5 ||
-                        playerTurn == 2 && table.get(1).size() == 5) {
+            } else if (Card.correspondingRow(card) == -1) {
+                if (playerTurn == 1 && table.get(3).size() == 5 ||
+                        playerTurn == 2 && table.get(0).size() == 5) {
                     this.setError("Cannot place card on table since row is full.");
                 // if rows are not full, place card on player's back row
                 } else if (playerTurn == 1) {
@@ -311,5 +373,62 @@ class PlaceCard extends ActionsOutput {
 
     public void setHandIdx(int handIdx) {
         this.handIdx = handIdx;
+    }
+}
+
+class UseEnvironmentCard extends ActionsOutput {
+
+    private int handIdx;
+    private int affectedRow;
+    public UseEnvironmentCard(int handIdx, int affectedRow, Player playerOne, Player playerTwo,
+                              ArrayList<LinkedList<MinionCard>> table, int playerTurn) {
+        super("useEnvironmentCard", null);
+        this.affectedRow = affectedRow;
+        this.handIdx = handIdx;
+
+        // check whether card is environment card, player has enough mana and affected row is enemy's row
+        if (playerTurn == 1 && MinionCard.correspondingRow(playerOne.getPlayerHand().get(handIdx)) != 0) {
+            this.setError("Chosen card is not of type environment.");
+        } else if (playerTurn == 2 && MinionCard.correspondingRow(playerTwo.getPlayerHand().get(handIdx)) != 0) {
+            this.setError("Chosen card is not of type environment.");
+        } else if (playerTurn == 1 && playerOne.getMana() < playerOne.getPlayerHand().get(handIdx).getMana()) {
+            this.setError("Not enough mana to use environment card.");
+        } else if (playerTurn == 2 && playerTwo.getMana() < playerTwo.getPlayerHand().get(handIdx).getMana()) {
+            this.setError("Not enough mana to use environment card.");
+        } else if (playerTurn == 1 && (affectedRow == 2 || affectedRow == 3)) {
+            this.setError("Chosen row does not belong to the enemy.");
+        } else if (playerTurn == 2 && (affectedRow == 0 || affectedRow == 1)) {
+            this.setError("Chosen row does not belong to the enemy.");
+        } else if (playerTurn == 1) {
+            Card environmentCard = playerOne.getPlayerHand().get(handIdx);
+            if (environmentCard.getName().equals("Firestorm")) {
+                ((FirestormEnvironmentCard)environmentCard).firestormEffect(table.get(affectedRow));
+            } else if (environmentCard.getName().equals("Winterfell")) {
+                ((WinterfellEnvironmentCard)environmentCard).winterfellEffect(table.get(affectedRow));
+            } else if (environmentCard.getName().equals("Heart Hound")) {
+                int err = ((HeartHoundEnvironmentCard)environmentCard).heartHoundEffect(table.get(affectedRow),
+                        table, playerTurn);
+                // if err is 1, card was not moved because player's row is full; else, card was moved, no error
+                if (err == 1) {
+                    this.setError("Cannot steal enemy card since the player's row is full.");
+                }
+            }
+        }
+    }
+
+    public int getHandIdx() {
+        return handIdx;
+    }
+
+    public void setHandIdx(int handIdx) {
+        this.handIdx = handIdx;
+    }
+
+    public int getAffectedRow() {
+        return affectedRow;
+    }
+
+    public void setAffectedRow(int affectedRow) {
+        this.affectedRow = affectedRow;
     }
 }

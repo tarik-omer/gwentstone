@@ -7,10 +7,12 @@
     "name" : "Firestorm",
     "mana" : 2
   }, {
-    "description" : "Standard card: Corruption is easy, you always wanted it, now I help you embrace it.",
-    "colors" : [ "Green", "Black" ],
-    "name" : "Heart Hound",
-    "mana" : 1
+    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
+    "colors" : [ "Yellow", "Orange", "Red" ],
+    "name" : "Miraj",
+    "mana" : 4,
+    "health" : 4,
+    "attackDamage" : 5
   } ]
 }, {
   "command" : "getPlayerMana",
@@ -19,6 +21,11 @@
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
+}, {
+  "command" : "getCardPosition",
+  "x" : 3,
+  "y" : 0,
+  "output" : "No card at that position."
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 1,
@@ -28,10 +35,12 @@
     "name" : "Firestorm",
     "mana" : 2
   }, {
-    "description" : "Standard card: Corruption is easy, you always wanted it, now I help you embrace it.",
-    "colors" : [ "Green", "Black" ],
-    "name" : "Heart Hound",
-    "mana" : 1
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "colors" : [ "Black", "Yellow" ],
+    "name" : "The Ripper",
+    "mana" : 3,
+    "health" : 4,
+    "attackDamage" : 5
   } ]
 }, {
   "command" : "getPlayerMana",
@@ -40,6 +49,11 @@
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
+}, {
+  "command" : "getCardPosition",
+  "x" : 3,
+  "y" : 0,
+  "output" : "No card at that position."
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
@@ -52,7 +66,64 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
-  "command" : "getCardsOnTable"
+  "command" : "getCardsOnTable",
+  "output" : [ [ {
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "White" ],
+    "name" : "Sentinel",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 2
+  } ], [ {
+    "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
+    "colors" : [ "Brown", "Black", "Grey" ],
+    "name" : "Goliath",
+    "mana" : 3,
+    "health" : 7,
+    "attackDamage" : 2
+  }, {
+    "description" : "Standard card: Death incarnate. No better time to die than now.",
+    "colors" : [ "Black", "Yellow" ],
+    "name" : "The Ripper",
+    "mana" : 3,
+    "health" : 4,
+    "attackDamage" : 5
+  }, {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Black", "White", "Green" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 6,
+    "attackDamage" : 3
+  } ], [ {
+    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
+    "colors" : [ "Yellow", "Orange", "Red" ],
+    "name" : "Miraj",
+    "mana" : 4,
+    "health" : 4,
+    "attackDamage" : 5
+  }, {
+    "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
+    "colors" : [ "Black", "Yellow" ],
+    "name" : "The Ripper",
+    "mana" : 3,
+    "health" : 4,
+    "attackDamage" : 5
+  }, {
+    "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
+    "colors" : [ "Yellow", "Orange", "Red" ],
+    "name" : "Miraj",
+    "mana" : 5,
+    "health" : 4,
+    "attackDamage" : 5
+  } ], [ {
+    "description" : "Premium card: Nobody suspects an outcast, not even the Gods.",
+    "colors" : [ "Black", "White", "Red" ],
+    "name" : "The Cursed One",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 0
+  } ] ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,

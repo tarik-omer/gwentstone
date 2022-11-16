@@ -1,13 +1,12 @@
 package main;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.*;
 
 import java.lang.reflect.AnnotatedArrayType;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 
 public class RunningGame {
     ArrayNode output;
@@ -65,9 +64,6 @@ public class RunningGame {
             // multiplier for mana gain of each player, each round
             int playerManaGain = 1;
 
-            // which turn of the round it is; at 2 turns, both players played, next round begins
-            int turnsInRound = 0;
-
             // each player starts with one card in hand
             playerOne.getPlayerHand().addLast(playerOne.getPlayerCurrentDeck().removeFirst());
             playerTwo.getPlayerHand().addLast(playerTwo.getPlayerCurrentDeck().removeFirst());
@@ -99,12 +95,29 @@ public class RunningGame {
                         output.addPOJO(getPlayerHero);
                         break;
                     case "getCardAtPosition":
+                        GetCardPosition getCardPosition = new GetCardPosition(command.getX(), command.getY(), table);
+                        if (getCardPosition.getOutput() == null) {
+                            // case: no card at given coordinates
+                            ObjectMapper objectMapper = new ObjectMapper();
+                            ObjectNode objectNode = objectMapper.createObjectNode();
+                            objectNode.put("command", "getCardPosition");
+                            objectNode.put("x", command.getX());
+                            objectNode.put("y", command.getY());
+                            objectNode.put("output", "No card at that position.");
+                            output.addPOJO(objectNode);
+                        } else {
+                            // case: card found
+                            output.addPOJO(getCardPosition);
+                        }
                         break;
                     case "getPlayerMana":
                         GetPlayerMana getPlayerMana = new GetPlayerMana(playerOne, playerTwo, command.getPlayerIdx());
                         output.addPOJO(getPlayerMana);
                         break;
                     case "getEnvironmentCardsInHand":
+                        GetEnvironmentCardsInHand getEnvironmentCardsInHand = new
+                                GetEnvironmentCardsInHand(command.getPlayerIdx(), playerOne, playerTwo);
+                        output.addPOJO(getEnvironmentCardsInHand);
                         break;
                     case "getFrozenCardsOnTable":
                         break;
@@ -134,6 +147,11 @@ public class RunningGame {
                     case "useHeroAbility":
                         break;
                     case "useEnvironmentCard":
+                        UseEnvironmentCard useEnvironmentCard = new UseEnvironmentCard(command.getHandIdx(),
+                                command.getAffectedRow(), playerOne, playerTwo, table, playerTurn);
+                        if (useEnvironmentCard.getError() != null) {
+                            output.addPOJO(useEnvironmentCard);
+                        }
                         break;
                     case "endPlayerTurn":
                         // next player
@@ -143,8 +161,7 @@ public class RunningGame {
                             playerTurn = 1;
                         }
                         // advance to next round if both players played
-                        if (turnsInRound == 1) {
-                            turnsInRound = 0;
+                        if (playerTurn == game.getStartGame().getStartingPlayer()) {
                             currentRound++;
 
                             // increment mana gain
@@ -160,14 +177,11 @@ public class RunningGame {
                                 playerOne.getPlayerHand().addLast(playerOne.getPlayerCurrentDeck().removeFirst());
                             if (playerTwo.getPlayerCurrentDeck().size() > 0)
                                 playerTwo.getPlayerHand().addLast(playerTwo.getPlayerCurrentDeck().removeFirst());
-
-                        } else {
-                            // increment turns in rounds
-                            turnsInRound++;
                         }
 
                         // TODO: Unfreeze frozen cards for the player whose turn ended
-
+                        // TODO: Implement death by Firestorm
+                        // TODO: Fix useEnvironmentCard and getCardAtPosition
                         break;
                 }
             }

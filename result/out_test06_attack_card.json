@@ -1,7 +1,21 @@
 [ {
   "command" : "getCardsInHand",
   "playerIdx" : 1,
-  "output" : [ ]
+  "output" : [ {
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "colors" : [ "Purple", "Yellow" ],
+    "name" : "Berserker",
+    "mana" : 2,
+    "health" : 1,
+    "attackDamage" : 2
+  }, {
+    "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
+    "colors" : [ "Black", "White", "Green" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 6,
+    "attackDamage" : 3
+  } ]
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
@@ -21,7 +35,36 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
-  "command" : "getCardsOnTable"
+  "command" : "getCardsOnTable",
+  "output" : [ [ ], [ {
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Black", "White", "Green" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 6,
+    "attackDamage" : 2
+  } ], [ {
+    "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
+    "colors" : [ "Black", "White", "Green" ],
+    "name" : "Warden",
+    "mana" : 2,
+    "health" : 6,
+    "attackDamage" : 3
+  } ], [ {
+    "description" : "Premium card: Nobody suspects an outcast, not even the Gods.",
+    "colors" : [ "Black", "White", "Red" ],
+    "name" : "The Cursed One",
+    "mana" : 2,
+    "health" : 3,
+    "attackDamage" : 0
+  }, {
+    "description" : "Premium card: Fear him. Your last breath is now.",
+    "colors" : [ "Purple", "Yellow" ],
+    "name" : "Berserker",
+    "mana" : 2,
+    "health" : 1,
+    "attackDamage" : 2
+  } ] ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,

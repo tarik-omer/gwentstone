@@ -61,6 +61,20 @@ public abstract class Card {
         this.mana = mana;
     }
 
+    public static int correspondingRow(Card card) {
+        if (card.getName().equals("Goliath") || card.getName().equals("Warden") ||
+                card.getName().equals("The Ripper") || card.getName().equals("Miraj")) {
+            // front row
+            return 1;
+        } else if (card.getName().equals("Disciple") || card.getName().equals("Sentinel") ||
+                card.getName().equals("Berserker") || card.getName().equals("The Cursed One")) {
+            // back row
+            return -1;
+        } else {
+            // environment card
+            return 0;
+        }
+    }
 }
 class MinionCard extends Card {
     private int health;
@@ -85,6 +99,7 @@ class MinionCard extends Card {
             isTank = true;
         }
     }
+
     @JsonIgnore
     public boolean isDead() {
         if (this.health <= 0)
@@ -158,7 +173,6 @@ class MinionCard extends Card {
                 + '\''
                 + '}';
     }
-
 }
 
 class Ripper extends MinionCard {
@@ -262,10 +276,11 @@ class HeartHoundEnvironmentCard extends Card {
         super(rawCard.getName(), rawCard.getMana(), rawCard.getDescription(), rawCard.getColors());
     }
 
-    MinionCard heartHoundEffect(LinkedList<MinionCard> cards) {
-        // initially null; if row is empty, will return null
+    int heartHoundEffect(LinkedList<MinionCard> cards, ArrayList<LinkedList<MinionCard>> table, int playerTurn) {
+        // initially null; if row is empty, will stay null
         MinionCard maxHealthMinionCard = null;
 
+        // get max health minion
         if (cards.size() == 1) {
             // if only one card, it is max hp card
             maxHealthMinionCard = cards.getFirst();
@@ -278,7 +293,30 @@ class HeartHoundEnvironmentCard extends Card {
                     maxHealthMinionCard = cards.get(i);
         }
 
-        return maxHealthMinionCard;
+        // first player used card
+        if (playerTurn == 1 && MinionCard.correspondingRow(maxHealthMinionCard) == 1) {
+            // destination row is full
+            if (table.get(2).size() == 5)
+                return 1;
+            // remove the card at index of max health minion, place it at row of current player - other cases = similar
+            table.get(2).addLast(table.get(1).remove(table.get(1).indexOf(maxHealthMinionCard)));
+        } else if (playerTurn == 1 && MinionCard.correspondingRow(maxHealthMinionCard) == -1) {
+            if (table.get(3).size() == 5)
+                return 1;
+            table.get(3).addLast(table.get(0).remove(table.get(0).indexOf(maxHealthMinionCard)));
+        // second player used card
+        } else if (playerTurn == 2 && MinionCard.correspondingRow(maxHealthMinionCard) == 1) {
+            if (table.get(1).size() == 5)
+                return 1;
+            table.get(1).addLast(table.get(2).remove(table.get(2).indexOf(maxHealthMinionCard)));
+        } else {
+            if (table.get(0).size() == 5) {
+                return 1;
+            }
+            table.get(0).addLast(table.get(3).remove(table.get(3).indexOf(maxHealthMinionCard)));
+        }
+        // if it got here, the card was moved accordingly, no error
+        return 0;
     }
 
     @Override
