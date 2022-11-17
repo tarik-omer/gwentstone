@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.ActionsInput;
+import fileio.Coordinates;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -149,21 +150,89 @@ public class PlayerCommands {
                     playerTwo.getPlayerHand().remove(command.getHandIdx());
                     playerTwo.useMana(environmentCard.getMana());
                 }
-//            } else if (environmentCard.getName().equals("Heart Hound")) {
-//                int err = ((HeartHoundEnvironmentCard)environmentCard).heartHoundEffect(table.get(command.getAffectedRow()),
-//                        table, gameInfo.getPlayerTurn());
-//                // if err is 1, card was not moved because player's row is full; else, card was moved, no error
-//                if (err == 1) {
-//                    objectNode.put("error", "Cannot steal enemy card since the player's row is full.");
-//                    output.addPOJO(objectNode);
-//                } else if (gameInfo.getPlayerTurn() == 1) {
-//                    playerOne.getPlayerHand().remove(command.getHandIdx());
-//                    playerOne.useMana(environmentCard.getMana());
-//                } else if (gameInfo.getPlayerTurn() == 2) {
-//                    playerTwo.getPlayerHand().remove(command.getHandIdx());
-//                    playerTwo.useMana(environmentCard.getMana());
-//                }
+            } else if (environmentCard.getName().equals("Heart Hound")) {
+                int err = ((HeartHoundEnvironmentCard)environmentCard).heartHoundEffect(table.get(command.getAffectedRow()),
+                        table, gameInfo.getPlayerTurn());
+                // if err is 1, card was not moved because player's row is full; else, card was moved, no error
+                if (err == 1) {
+                    objectNode.put("error", "Cannot steal enemy card since the player's row is full.");
+                    output.addPOJO(objectNode);
+                } else if (gameInfo.getPlayerTurn() == 1) {
+                    playerOne.getPlayerHand().remove(command.getHandIdx());
+                    playerOne.useMana(environmentCard.getMana());
+                } else if (gameInfo.getPlayerTurn() == 2) {
+                    playerTwo.getPlayerHand().remove(command.getHandIdx());
+                    playerTwo.useMana(environmentCard.getMana());
+                }
             }
+        }
+    }
+
+    public void cardUsesAttack(ActionsInput command) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        // prepare object node, in case of error
+        objectNode.put("command", command.getCommand());
+
+        objectNode.putPOJO("cardAttacker", new Coordinates(command.getCardAttacker()));
+        objectNode.putPOJO("cardAttacked", new Coordinates(command.getCardAttacked()));
+
+        // check to see whether attacked card belongs to the enemy
+        if (gameInfo.getPlayerTurn() == 1 && (command.getCardAttacked().getX() == 2 ||
+                command.getCardAttacked().getX() == 3)) {
+            objectNode.put("error", "Attacked card does not belong to the enemy.");
+            output.addPOJO(objectNode);
+            return;
+        } else if (gameInfo.getPlayerTurn() == 2 && (command.getCardAttacked().getX() == 1 ||
+                command.getCardAttacked().getX() == 0)) {
+            objectNode.put("error", "Attacked card does not belong to the enemy.");
+            output.addPOJO(objectNode);
+            return;
+        }
+
+        // attacked and attacker coordinates
+        int attackerX = command.getCardAttacker().getX();
+        int attackerY = command.getCardAttacker().getY();
+        int attackedX = command.getCardAttacked().getX();
+        int attackedY = command.getCardAttacked().getY();
+
+        // attacked and attacker cards
+        MinionCard attackerCard = table.get(attackerX).get(attackerY);
+        MinionCard attackedCard = table.get(attackedX).get(attackedY);
+
+        // check to see if attacker is able to attack / is frozen
+        if (attackerCard.isAbleToAttack()) {
+            objectNode.put("error", "Attacker card has already attacked this turn.");
+            output.addPOJO(objectNode);
+            return;
+        } else if (attackerCard.isFrozen()) {
+            objectNode.put("error", "Attacker card is frozen.");
+            output.addPOJO(objectNode);
+            return;
+        }
+
+        // get front row of attacked player
+        LinkedList<MinionCard> attackedFrontRow;
+        if (gameInfo.getPlayerTurn() == 1)
+            attackedFrontRow = table.get(2);
+        else
+            attackedFrontRow = table.get(1);
+
+        // check to see if there is a tank on the enemy's side; tanks can only be on the first row
+        boolean isTankOnRow = attackedFrontRow.stream().filter(MinionCard::isTank).isParallel();
+
+        // if there are tanks on the enemy side and the attacked card is not a tank, cannot attack
+        if (isTankOnRow && !attackedCard.isTank()) {
+            objectNode.put("error", "Attacked card is not of type 'Tank’.");
+            output.addPOJO(objectNode);
+            return;
+        }
+
+        // deal the damage
+        attackerCard.attackMinion(attackedCard);
+
+        // if minion is dead, remove from table
+        if (attackedCard.isDead()) {
+            table.get(attackedX).remove(attackedY);
         }
     }
 

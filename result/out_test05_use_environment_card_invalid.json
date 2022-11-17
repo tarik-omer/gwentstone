@@ -16,7 +16,7 @@
     "colors" : [ "Red", "Purple" ],
     "name" : "Goliath",
     "mana" : 3,
-    "health" : 6,
+    "health" : 7,
     "attackDamage" : 2
   }
 }, {
@@ -62,7 +62,7 @@
     "colors" : [ "Red", "Purple" ],
     "name" : "Goliath",
     "mana" : 3,
-    "health" : 6,
+    "health" : 7,
     "attackDamage" : 2
   }
 }, {
@@ -80,6 +80,11 @@
   "handIdx" : 0,
   "affectedRow" : 3,
   "error" : "Chosen row does not belong to the enemy."
+}, {
+  "command" : "useEnvironmentCard",
+  "handIdx" : 0,
+  "affectedRow" : 2,
+  "error" : "Cannot steal enemy card since the player's row is full."
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,

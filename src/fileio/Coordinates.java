@@ -6,7 +6,12 @@ public final class Coordinates {
    public Coordinates() {
    }
 
-   public int getX() {
+   public Coordinates(Coordinates coordinates) {
+      this.x = coordinates.x;
+      this.y = coordinates.y;
+   }
+
+    public int getX() {
       return x;
    }
 

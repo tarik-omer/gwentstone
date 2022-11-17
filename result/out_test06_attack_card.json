@@ -41,7 +41,7 @@
     "colors" : [ "Black", "White", "Green" ],
     "name" : "Warden",
     "mana" : 2,
-    "health" : 6,
+    "health" : 1,
     "attackDamage" : 2
   } ], [ {
     "description" : "Premium card: You shall not pass, you shall not prevail, you shall perish.",
@@ -55,7 +55,7 @@
     "colors" : [ "Black", "White", "Red" ],
     "name" : "The Cursed One",
     "mana" : 2,
-    "health" : 3,
+    "health" : 1,
     "attackDamage" : 0
   }, {
     "description" : "Premium card: Fear him. Your last breath is now.",

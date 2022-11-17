@@ -85,10 +85,7 @@ public class DebuggingCommands {
         LinkedList<LinkedList<MinionCard>> tableCopy = new LinkedList<>();
         // add each row
         for (LinkedList<MinionCard> row : table) {
-            LinkedList<MinionCard> rowCopy = new LinkedList<>();
-            for (MinionCard card : row) {
-                rowCopy.add(card);
-            }
+            LinkedList<MinionCard> rowCopy = new LinkedList<>(MinionCard.getMinionCardListCopy(row));
             tableCopy.add(rowCopy);
         }
 
@@ -164,9 +161,9 @@ public class DebuggingCommands {
         objectNode.put("y", command.getY());
 
         if (table.get(command.getX()).size() > command.getY())
-            objectNode.putPOJO("output", table.get(command.getX()).get(command.getY()));
+            objectNode.putPOJO("output", new MinionCard(table.get(command.getX()).get(command.getY())));
         else
-            objectNode.put("output", "No card at that position.");
+            objectNode.put("output", "No card available at that position.");
 
         output.addPOJO(objectNode);
     }

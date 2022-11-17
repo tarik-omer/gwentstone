@@ -131,7 +131,7 @@
     "colors" : [ "Purple", "Yellow" ],
     "name" : "Berserker",
     "mana" : 2,
-    "health" : 2,
+    "health" : 1,
     "attackDamage" : 2
   }
 }, {
@@ -179,7 +179,7 @@
     "colors" : [ "Purple", "Yellow" ],
     "name" : "Berserker",
     "mana" : 2,
-    "health" : 2,
+    "health" : 1,
     "attackDamage" : 2
   }
 }, {
@@ -199,15 +199,8 @@
     "colors" : [ "Purple", "Yellow" ],
     "name" : "Berserker",
     "mana" : 2,
-    "health" : 2,
+    "health" : 1,
     "attackDamage" : 2
-  }, {
-    "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
-    "colors" : [ "Green", "Yellow", "Blue" ],
-    "name" : "Disciple",
-    "mana" : 3,
-    "health" : 2,
-    "attackDamage" : 0
   } ], [ {
     "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
     "colors" : [ "Orange", "Red", "Black" ],
@@ -241,7 +234,7 @@
     "colors" : [ "Brown", "Black", "Grey" ],
     "name" : "Goliath",
     "mana" : 3,
-    "health" : 7,
+    "health" : 2,
     "attackDamage" : 1
   }, {
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",

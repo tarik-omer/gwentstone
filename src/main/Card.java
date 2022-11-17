@@ -19,6 +19,13 @@ public abstract class Card {
 
     private int mana = -1;
 
+    public Card (Card cardToCopy) {
+        this.mana = cardToCopy.mana;
+        this.colors = new ArrayList<>(cardToCopy.getColors());
+        this.description = cardToCopy.description;
+        this.name = cardToCopy.name;
+    }
+
     Card (String name, int mana, String description, ArrayList<String> colors) {
         this.name = name;
         this.colors = new ArrayList<>(colors);
@@ -99,6 +106,15 @@ class MinionCard extends Card {
         }
     }
 
+    public MinionCard(MinionCard minionCardToCopy) {
+        super(minionCardToCopy);
+        this.health = minionCardToCopy.health;
+        this.isTank = minionCardToCopy.isTank;
+        this.ableToAttack = minionCardToCopy.isAbleToAttack();
+        this.attackDamage = minionCardToCopy.attackDamage;
+        this.isFrozen = minionCardToCopy.isFrozen;
+    }
+
     public void loseHealth(int lostHealth) {
         this.health = this.health - lostHealth;
     }
@@ -176,6 +192,17 @@ class MinionCard extends Card {
                 + '\''
                 + '}';
     }
+
+    public static LinkedList<MinionCard> getMinionCardListCopy(LinkedList<MinionCard> initialMinionCardList) {
+        LinkedList<MinionCard> minionCardListCopy = new LinkedList<>();
+
+        for (MinionCard minionCard : initialMinionCardList) {
+            MinionCard minionCardCopy = new MinionCard(minionCard);
+            minionCardListCopy.addLast(minionCardCopy);
+        }
+
+        return minionCardListCopy;
+    }
 }
 
 class Ripper extends MinionCard {
@@ -222,11 +249,17 @@ class FirestormEnvironmentCard extends Card {
 
     void firestormEffect(LinkedList<MinionCard> cards) {
         // deal damage to all cards
+        LinkedList<MinionCard> deadCards = new LinkedList<>();
+        // deal damage to all minions on row, marks dead minions
         for (MinionCard card : cards) {
             card.loseHealth(1);
             if (card.isDead()) {
-                cards.remove(cards.indexOf(card));
+                deadCards.add(card);
             }
+        }
+        // remove killed minion cards
+        for (MinionCard deadCard : deadCards) {
+            cards.removeFirstOccurrence(deadCard);
         }
     }
     @Override
@@ -256,7 +289,6 @@ class WinterfellEnvironmentCard extends Card {
         // take ability to attack (will be reset next round)
         for (MinionCard card : cards) {
             card.setFrozen(true);
-            card.setAbleToAttack(false);
         }
     }
     @Override

@@ -116,6 +116,7 @@ public class RunningGame {
                         playerCommands.placeCard(command);
                         break;
                     case "cardUsesAttack":
+                        playerCommands.cardUsesAttack(command);
                         break;
                     case "cardUsesAbility":
                         break;
@@ -153,6 +154,8 @@ public class RunningGame {
                         }
 
                         // TODO: Unfreeze frozen cards for the player whose turn ended
+                        // TODO: Set is able to attack (both here and in useAttackCard in PlayerCommands
+                        // TODO: Convert DebuggingCommands and PlayerCommands to Singleton!!!
                         break;
                 }
             }

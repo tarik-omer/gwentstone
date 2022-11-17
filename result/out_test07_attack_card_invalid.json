@@ -2,7 +2,18 @@
   "command" : "getCardAtPosition",
   "x" : 0,
   "y" : 3,
-  "output" : "No card at that position."
+  "output" : "No card available at that position."
+}, {
+  "command" : "cardUsesAttack",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "cardAttacked" : {
+    "x" : 3,
+    "y" : 0
+  },
+  "error" : "Attacker card is frozen."
 }, {
   "command" : "getCardAtPosition",
   "x" : 3,
@@ -12,7 +23,7 @@
     "colors" : [ "Yellow", "White" ],
     "name" : "Disciple",
     "mana" : 2,
-    "health" : 4,
+    "health" : 2,
     "attackDamage" : 0
   }
 }, {
@@ -23,7 +34,7 @@
     "colors" : [ "Black", "White", "Red" ],
     "name" : "The Cursed One",
     "mana" : 2,
-    "health" : 3,
+    "health" : 1,
     "attackDamage" : 0
   } ]
 }, {
@@ -45,6 +56,17 @@
     "health" : 4,
     "attackDamage" : 0
   }
+}, {
+  "command" : "cardUsesAttack",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "cardAttacked" : {
+    "x" : 0,
+    "y" : 1
+  },
+  "error" : "Attacked card does not belong to the enemy."
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
@@ -74,28 +96,21 @@
     "colors" : [ "Black", "White", "Red" ],
     "name" : "The Cursed One",
     "mana" : 2,
-    "health" : 3,
+    "health" : 1,
     "attackDamage" : 0
   } ], [ ], [ {
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "colors" : [ "Red", "Purple" ],
     "name" : "Goliath",
     "mana" : 4,
-    "health" : 7,
+    "health" : 3,
     "attackDamage" : 2
   } ], [ {
-    "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
-    "colors" : [ "Yellow", "White" ],
-    "name" : "Disciple",
-    "mana" : 2,
-    "health" : 4,
-    "attackDamage" : 0
-  }, {
     "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
     "colors" : [ "Green", "Yellow", "Blue" ],
     "name" : "Disciple",
     "mana" : 2,
-    "health" : 4,
+    "health" : 2,
     "attackDamage" : 0
   } ] ]
 }, {
