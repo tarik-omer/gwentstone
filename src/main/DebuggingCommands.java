@@ -17,7 +17,15 @@ public class DebuggingCommands {
     private GameInfo gameInfo;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    DebuggingCommands(ArrayList<LinkedList<MinionCard>> table, Player playerOne, Player playerTwo, ArrayNode output,
+    private static DebuggingCommands instance = null;
+
+    static {
+        instance = new DebuggingCommands();
+    }
+    private DebuggingCommands() {
+
+    }
+    private DebuggingCommands(ArrayList<LinkedList<MinionCard>> table, Player playerOne, Player playerTwo, ArrayNode output,
                       GameInfo gameInfo) {
         this.output = output;
         this.table = table;
@@ -26,15 +34,19 @@ public class DebuggingCommands {
         this.gameInfo = gameInfo;
     }
 
+    public static DebuggingCommands getInstance() {
+        return instance;
+    }
+
     public void getCardsInHand(ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
         objectNode.put("playerIdx", command.getPlayerIdx());
         if (command.getPlayerIdx() == 1)
-            objectNode.putPOJO("output", new LinkedList<>(playerOne.getPlayerHand()));
+            objectNode.putPOJO("output", Card.getCardListCopy(playerOne.getPlayerHand()));
         else
-            objectNode.putPOJO("output", new LinkedList<>(playerTwo.getPlayerHand()));
+            objectNode.putPOJO("output", Card.getCardListCopy(playerTwo.getPlayerHand()));
 
         output.addPOJO(objectNode);
     }
@@ -46,9 +58,9 @@ public class DebuggingCommands {
         objectNode.put("playerIdx", command.getPlayerIdx());
 
         if (command.getPlayerIdx() == 1)
-            objectNode.putPOJO("output", new LinkedList<>(playerOne.getPlayerCurrentDeck()));
+            objectNode.putPOJO("output", Card.getCardListCopy(playerOne.getPlayerCurrentDeck()));
         else
-            objectNode.putPOJO("output", new LinkedList<>(playerTwo.getPlayerCurrentDeck()));
+            objectNode.putPOJO("output", Card.getCardListCopy(playerTwo.getPlayerCurrentDeck()));
 
         output.addPOJO(objectNode);
     }
@@ -60,9 +72,9 @@ public class DebuggingCommands {
         objectNode.put("playerIdx", command.getPlayerIdx());
 
         if (command.getPlayerIdx() == 1)
-            objectNode.putPOJO("output", playerOne.getHeroCard());
+            objectNode.putPOJO("output", new HeroCard(playerOne.getHeroCard()));
         else
-            objectNode.putPOJO("output", playerTwo.getHeroCard());
+            objectNode.putPOJO("output", new HeroCard(playerTwo.getHeroCard()));
 
         output.addPOJO(objectNode);
     }
@@ -85,7 +97,7 @@ public class DebuggingCommands {
         LinkedList<LinkedList<MinionCard>> tableCopy = new LinkedList<>();
         // add each row
         for (LinkedList<MinionCard> row : table) {
-            LinkedList<MinionCard> rowCopy = new LinkedList<>(MinionCard.getMinionCardListCopy(row));
+            LinkedList<MinionCard> rowCopy = Card.getMinionCardListCopy(row);
             tableCopy.add(rowCopy);
         }
 
@@ -145,7 +157,7 @@ public class DebuggingCommands {
         for (LinkedList<MinionCard> row : table) {
             for (MinionCard card : row) {
                 if (card.isFrozen())
-                    frozenCards.add(card);
+                    frozenCards.add(new MinionCard(card));
             }
         }
 
@@ -166,5 +178,45 @@ public class DebuggingCommands {
             objectNode.put("output", "No card available at that position.");
 
         output.addPOJO(objectNode);
+    }
+
+    public ArrayList<LinkedList<MinionCard>> getTable() {
+        return table;
+    }
+
+    public void setTable(ArrayList<LinkedList<MinionCard>> table) {
+        this.table = table;
+    }
+
+    public Player getPlayerOne() {
+        return playerOne;
+    }
+
+    public void setPlayerOne(Player playerOne) {
+        this.playerOne = playerOne;
+    }
+
+    public Player getPlayerTwo() {
+        return playerTwo;
+    }
+
+    public void setPlayerTwo(Player playerTwo) {
+        this.playerTwo = playerTwo;
+    }
+
+    public ArrayNode getOutput() {
+        return output;
+    }
+
+    public void setOutput(ArrayNode output) {
+        this.output = output;
+    }
+
+    public GameInfo getGameInfo() {
+        return gameInfo;
+    }
+
+    public void setGameInfo(GameInfo gameInfo) {
+        this.gameInfo = gameInfo;
     }
 }

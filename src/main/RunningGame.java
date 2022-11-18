@@ -70,13 +70,27 @@ public class RunningGame {
             playerOne.getPlayerHand().addLast(playerOne.getPlayerCurrentDeck().removeFirst());
             playerTwo.getPlayerHand().addLast(playerTwo.getPlayerCurrentDeck().removeFirst());
 
-            DebuggingCommands debuggingCommands = new DebuggingCommands(table, playerOne, playerTwo, output, gameInfo);
-            PlayerCommands playerCommands = new PlayerCommands(table, playerOne, playerTwo, output, gameInfo);
+            // Player and Debugging Commands use Singleton design pattern - they are meant to be instantiated only once
+            PlayerCommands playerCommands = PlayerCommands.getInstance();
+
+            playerCommands.setTable(table);
+            playerCommands.setGameInfo(gameInfo);
+            playerCommands.setOutput(output);
+            playerCommands.setPlayerOne(playerOne);
+            playerCommands.setPlayerTwo(playerTwo);
+
+            DebuggingCommands debuggingCommands = DebuggingCommands.getInstance();
+
+            debuggingCommands.setTable(table);
+            debuggingCommands.setGameInfo(gameInfo);
+            debuggingCommands.setOutput(output);
+            debuggingCommands.setPlayerOne(playerOne);
+            debuggingCommands.setPlayerTwo(playerTwo);
 
             for (ActionsInput command : actionsInput) {
                 // process each command
+                // debugging commands
                 switch (command.getCommand()) {
-                    // debugging commands
                     case "getCardsInHand":
                         debuggingCommands.getCardsInHand(command);
                         break;
@@ -103,15 +117,14 @@ public class RunningGame {
                         break;
                     case "getFrozenCardsOnTable":
                         debuggingCommands.getFrozenCardsOnTable(command);
+                        // statistics commands
                         break;
-                    // statistics commands
                     case "getTotalGamesPlayed":
                         break;
                     case "getPlayerOneWins":
                         break;
-                    case "getPlayerTwoWins":
+                    case "getPlayerTwoWins": // player commands
                         break;
-                    // player commands
                     case "placeCard":
                         playerCommands.placeCard(command);
                         break;
@@ -119,6 +132,7 @@ public class RunningGame {
                         playerCommands.cardUsesAttack(command);
                         break;
                     case "cardUsesAbility":
+                        playerCommands.cardUsedAbility(command);
                         break;
                     case "useAttackHero":
                         break;
@@ -127,13 +141,32 @@ public class RunningGame {
                     case "useEnvironmentCard":
                         playerCommands.useEnvironmentCard(command);
                         break;
-                    case "endPlayerTurn":
-                        // next player
+                    case "endPlayerTurn": // clear freeze and unable to attack
+                        LinkedList<MinionCard> frontRow;
+                        LinkedList<MinionCard> backRow;
+                        if (gameInfo.getPlayerTurn() == 1) {
+                            frontRow = table.get(2);
+                            backRow = table.get(3);
+                        } else {
+                            frontRow = table.get(1);
+                            backRow = table.get(0);
+                        }
+                        for (MinionCard minionCard : frontRow) {
+                            minionCard.setFrozen(false);
+                            minionCard.setAbleToAttack(true);
+                        }
+                        for (MinionCard minionCard : backRow) {
+                            minionCard.setFrozen(false);
+                            minionCard.setAbleToAttack(true);
+                        }
+
+                        // set turn to next player
                         if (gameInfo.getPlayerTurn() == 1) {
                             gameInfo.setPlayerTurn(2);
                         } else if (gameInfo.getPlayerTurn() == 2) {
                             gameInfo.setPlayerTurn(1);
                         }
+
                         // advance to next round if both players played
                         if (gameInfo.getPlayerTurn() == game.getStartGame().getStartingPlayer()) {
                             gameInfo.setCurrentRound(gameInfo.getCurrentRound() + 1);
@@ -153,9 +186,8 @@ public class RunningGame {
                                 playerTwo.getPlayerHand().addLast(playerTwo.getPlayerCurrentDeck().removeFirst());
                         }
 
-                        // TODO: Unfreeze frozen cards for the player whose turn ended
-                        // TODO: Set is able to attack (both here and in useAttackCard in PlayerCommands
-                        // TODO: Convert DebuggingCommands and PlayerCommands to Singleton!!!
+                        // TODO: Add JavaDocs
+                        // TODO: Fix PlayerCommands::useCardAbility -> invalid tests
                         break;
                 }
             }

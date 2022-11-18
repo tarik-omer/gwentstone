@@ -65,7 +65,7 @@
     "colors" : [ "Red", "Black" ],
     "name" : "Miraj",
     "mana" : 4,
-    "health" : 4,
+    "health" : 2,
     "attackDamage" : 5
   }
 }, {
@@ -93,7 +93,7 @@
     "colors" : [ "Purple", "Yellow" ],
     "name" : "Berserker",
     "mana" : 2,
-    "health" : 2,
+    "health" : 4,
     "attackDamage" : 2
   }
 }, {
@@ -103,6 +103,17 @@
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 2,
   "output" : [ ]
+}, {
+  "command" : "cardUsesAbility",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 1
+  },
+  "cardAttacked" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "error" : "Attacked card does not belong to the enemy."
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
@@ -131,7 +142,7 @@
     "colors" : [ "Purple", "Yellow" ],
     "name" : "Berserker",
     "mana" : 2,
-    "health" : 1,
+    "health" : 3,
     "attackDamage" : 2
   }
 }, {
@@ -146,7 +157,7 @@
     "colors" : [ "Red", "Black" ],
     "name" : "Miraj",
     "mana" : 4,
-    "health" : 4,
+    "health" : 2,
     "attackDamage" : 5
   }
 }, {
@@ -179,7 +190,7 @@
     "colors" : [ "Purple", "Yellow" ],
     "name" : "Berserker",
     "mana" : 2,
-    "health" : 1,
+    "health" : 3,
     "attackDamage" : 2
   }
 }, {
@@ -199,7 +210,7 @@
     "colors" : [ "Purple", "Yellow" ],
     "name" : "Berserker",
     "mana" : 2,
-    "health" : 1,
+    "health" : 3,
     "attackDamage" : 2
   } ], [ {
     "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
@@ -227,7 +238,7 @@
     "colors" : [ "Red", "Black" ],
     "name" : "Miraj",
     "mana" : 4,
-    "health" : 4,
+    "health" : 2,
     "attackDamage" : 5
   }, {
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",

@@ -266,7 +266,7 @@
     "name" : "Warden",
     "mana" : 2,
     "health" : 1,
-    "attackDamage" : 7
+    "attackDamage" : 5
   }
 }, {
   "command" : "getCardsOnTable",
@@ -297,7 +297,7 @@
     "name" : "Warden",
     "mana" : 2,
     "health" : 1,
-    "attackDamage" : 7
+    "attackDamage" : 5
   } ], [ {
     "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
     "colors" : [ "Black", "Grey", "Blue" ],

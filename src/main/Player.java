@@ -81,33 +81,40 @@ public class Player {
             Card processedCard;
 
             // if card has certain name, make it object of said type
-            if (rawCard.getName().equals("Goliath") || rawCard.getName().equals("Warden") ||
-                    rawCard.getName().equals("Sentinel") || rawCard.getName().equals("Berserker")) {
-                processedCard = new MinionCard(rawCard);
-                processedDeck.add(processedCard);
-            } else if (rawCard.getName().equals("The Ripper")) {
-                processedCard = new Ripper(rawCard);
-                processedDeck.add(processedCard);
-            } else if (rawCard.getName().equals("Miraj")) {
-                processedCard = new Miraj(rawCard);
-                processedDeck.add(processedCard);
-            } else if (rawCard.getName().equals("The Cursed One")) {
-                processedCard = new CursedOne(rawCard);
-                processedDeck.add(processedCard);
-            } else if (rawCard.getName().equals("Disciple")) {
-                processedCard = new Disciple(rawCard);
-                processedDeck.add(processedCard);
-            } else if (rawCard.getName().equals("Firestorm")) {
-                processedCard = new FirestormEnvironmentCard(rawCard);
-                processedDeck.add(processedCard);
-            } else if (rawCard.getName().equals("Winterfell")) {
-                processedCard = new WinterfellEnvironmentCard(rawCard);
-                processedDeck.add(processedCard);
-            } else if (rawCard.getName().equals("Heart Hound")) {
-                processedCard = new HeartHoundEnvironmentCard(rawCard);
-                processedDeck.add(processedCard);
-            } else {
-                System.out.println("Wrong card.");
+            switch (rawCard.getName()) {
+                case "Goliath", "Warden", "Sentinel", "Berserker" -> {
+                    processedCard = new MinionCard(rawCard);
+                    processedDeck.add(processedCard);
+                }
+                case "The Ripper" -> {
+                    processedCard = new Ripper(rawCard);
+                    processedDeck.add(processedCard);
+                }
+                case "Miraj" -> {
+                    processedCard = new Miraj(rawCard);
+                    processedDeck.add(processedCard);
+                }
+                case "The Cursed One" -> {
+                    processedCard = new CursedOne(rawCard);
+                    processedDeck.add(processedCard);
+                }
+                case "Disciple" -> {
+                    processedCard = new Disciple(rawCard);
+                    processedDeck.add(processedCard);
+                }
+                case "Firestorm" -> {
+                    processedCard = new FirestormEnvironmentCard(rawCard);
+                    processedDeck.add(processedCard);
+                }
+                case "Winterfell" -> {
+                    processedCard = new WinterfellEnvironmentCard(rawCard);
+                    processedDeck.add(processedCard);
+                }
+                case "Heart Hound" -> {
+                    processedCard = new HeartHoundEnvironmentCard(rawCard);
+                    processedDeck.add(processedCard);
+                }
+                default -> System.out.println("Wrong card.");
             }
         }
 
@@ -122,17 +129,15 @@ public class Player {
         HeroCard heroCard;
 
         // based on hero name, create corresponding hero object
-        if (rawHero.getName().equals("Lord Royce")) {
-            heroCard = new LordRoyce(rawHero);
-        } else if (rawHero.getName().equals("Empress Thorina")) {
-            heroCard = new EmpressThorina(rawHero);
-        } else if (rawHero.getName().equals("King Mudface")) {
-            heroCard = new KingMudface(rawHero);
-        } else if (rawHero.getName().equals("General Kocioraw")) {
-            heroCard = new GeneralKocioraw(rawHero);
-        } else {
-            System.out.println("Wrong hero");
-            heroCard = null;
+        switch (rawHero.getName()) {
+            case "Lord Royce" -> heroCard = new LordRoyce(rawHero);
+            case "Empress Thorina" -> heroCard = new EmpressThorina(rawHero);
+            case "King Mudface" -> heroCard = new KingMudface(rawHero);
+            case "General Kocioraw" -> heroCard = new GeneralKocioraw(rawHero);
+            default -> {
+                System.out.println("Wrong hero");
+                heroCard = null;
+            }
         }
         return heroCard;
     }

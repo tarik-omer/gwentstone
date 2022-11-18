@@ -14,17 +14,30 @@ public class PlayerCommands {
     private Player playerOne;
     private Player playerTwo;
     private ArrayNode output;
-
     private GameInfo gameInfo;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public PlayerCommands(ArrayList<LinkedList<MinionCard>> table, Player playerOne, Player playerTwo, ArrayNode output, GameInfo gameInfo) {
+    // Singleton
+    private static PlayerCommands instance = null;
+
+    static {
+        instance = new PlayerCommands();
+    }
+
+    private PlayerCommands() {
+
+    }
+
+    private PlayerCommands(ArrayList<LinkedList<MinionCard>> table, Player playerOne, Player playerTwo, ArrayNode output, GameInfo gameInfo) {
         this.table = table;
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
         this.output = output;
         this.gameInfo = gameInfo;
+    }
+
+    public static PlayerCommands getInstance() {
+        return instance;
     }
 
     public void placeCard(ActionsInput command) {
@@ -132,37 +145,41 @@ public class PlayerCommands {
             else
                 environmentCard = playerTwo.getPlayerHand().get(command.getHandIdx());
 
-            if (environmentCard.getName().equals("Firestorm")) {
-                ((FirestormEnvironmentCard)environmentCard).firestormEffect(table.get(command.getAffectedRow()));
-                if (gameInfo.getPlayerTurn() == 1) {
-                    playerOne.getPlayerHand().remove(command.getHandIdx());
-                    playerOne.useMana(environmentCard.getMana());
-                } else if (gameInfo.getPlayerTurn() == 2) {
-                    playerTwo.getPlayerHand().remove(command.getHandIdx());
-                    playerTwo.useMana(environmentCard.getMana());
+            switch (environmentCard.getName()) {
+                case "Firestorm" -> {
+                    ((FirestormEnvironmentCard) environmentCard).firestormEffect(table.get(command.getAffectedRow()));
+                    if (gameInfo.getPlayerTurn() == 1) {
+                        playerOne.getPlayerHand().remove(command.getHandIdx());
+                        playerOne.useMana(environmentCard.getMana());
+                    } else if (gameInfo.getPlayerTurn() == 2) {
+                        playerTwo.getPlayerHand().remove(command.getHandIdx());
+                        playerTwo.useMana(environmentCard.getMana());
+                    }
                 }
-            } else if (environmentCard.getName().equals("Winterfell")) {
-                ((WinterfellEnvironmentCard)environmentCard).winterfellEffect(table.get(command.getAffectedRow()));
-                if (gameInfo.getPlayerTurn() == 1) {
-                    playerOne.getPlayerHand().remove(command.getHandIdx());
-                    playerOne.useMana(environmentCard.getMana());
-                } else if (gameInfo.getPlayerTurn() == 2) {
-                    playerTwo.getPlayerHand().remove(command.getHandIdx());
-                    playerTwo.useMana(environmentCard.getMana());
+                case "Winterfell" -> {
+                    ((WinterfellEnvironmentCard) environmentCard).winterfellEffect(table.get(command.getAffectedRow()));
+                    if (gameInfo.getPlayerTurn() == 1) {
+                        playerOne.getPlayerHand().remove(command.getHandIdx());
+                        playerOne.useMana(environmentCard.getMana());
+                    } else if (gameInfo.getPlayerTurn() == 2) {
+                        playerTwo.getPlayerHand().remove(command.getHandIdx());
+                        playerTwo.useMana(environmentCard.getMana());
+                    }
                 }
-            } else if (environmentCard.getName().equals("Heart Hound")) {
-                int err = ((HeartHoundEnvironmentCard)environmentCard).heartHoundEffect(table.get(command.getAffectedRow()),
-                        table, gameInfo.getPlayerTurn());
-                // if err is 1, card was not moved because player's row is full; else, card was moved, no error
-                if (err == 1) {
-                    objectNode.put("error", "Cannot steal enemy card since the player's row is full.");
-                    output.addPOJO(objectNode);
-                } else if (gameInfo.getPlayerTurn() == 1) {
-                    playerOne.getPlayerHand().remove(command.getHandIdx());
-                    playerOne.useMana(environmentCard.getMana());
-                } else if (gameInfo.getPlayerTurn() == 2) {
-                    playerTwo.getPlayerHand().remove(command.getHandIdx());
-                    playerTwo.useMana(environmentCard.getMana());
+                case "Heart Hound" -> {
+                    int err = ((HeartHoundEnvironmentCard) environmentCard).heartHoundEffect(table.get(command.getAffectedRow()),
+                            table, gameInfo.getPlayerTurn());
+                    // if err is 1, card was not moved because player's row is full; else, card was moved, no error
+                    if (err == 1) {
+                        objectNode.put("error", "Cannot steal enemy card since the player's row is full.");
+                        output.addPOJO(objectNode);
+                    } else if (gameInfo.getPlayerTurn() == 1) {
+                        playerOne.getPlayerHand().remove(command.getHandIdx());
+                        playerOne.useMana(environmentCard.getMana());
+                    } else if (gameInfo.getPlayerTurn() == 2) {
+                        playerTwo.getPlayerHand().remove(command.getHandIdx());
+                        playerTwo.useMana(environmentCard.getMana());
+                    }
                 }
             }
         }
@@ -173,8 +190,10 @@ public class PlayerCommands {
         // prepare object node, in case of error
         objectNode.put("command", command.getCommand());
 
-        objectNode.putPOJO("cardAttacker", new Coordinates(command.getCardAttacker()));
-        objectNode.putPOJO("cardAttacked", new Coordinates(command.getCardAttacked()));
+        objectNode.putPOJO("cardAttacker", new Coordinates(command.getCardAttacker().getX(),
+                command.getCardAttacker().getY()));
+        objectNode.putPOJO("cardAttacked", new Coordinates(command.getCardAttacked().getX(),
+                command.getCardAttacked().getY()));
 
         // check to see whether attacked card belongs to the enemy
         if (gameInfo.getPlayerTurn() == 1 && (command.getCardAttacked().getX() == 2 ||
@@ -200,7 +219,7 @@ public class PlayerCommands {
         MinionCard attackedCard = table.get(attackedX).get(attackedY);
 
         // check to see if attacker is able to attack / is frozen
-        if (attackerCard.isAbleToAttack()) {
+        if (!attackerCard.isAbleToAttack()) {
             objectNode.put("error", "Attacker card has already attacked this turn.");
             output.addPOJO(objectNode);
             return;
@@ -213,27 +232,131 @@ public class PlayerCommands {
         // get front row of attacked player
         LinkedList<MinionCard> attackedFrontRow;
         if (gameInfo.getPlayerTurn() == 1)
-            attackedFrontRow = table.get(2);
-        else
             attackedFrontRow = table.get(1);
+        else
+            attackedFrontRow = table.get(2);
 
         // check to see if there is a tank on the enemy's side; tanks can only be on the first row
-        boolean isTankOnRow = attackedFrontRow.stream().filter(MinionCard::isTank).isParallel();
+        boolean isTankOnRow = false;
+        for (MinionCard minionCard : attackedFrontRow)
+            if (minionCard.isTank()) {
+                isTankOnRow = true;
+                break;
+            }
 
         // if there are tanks on the enemy side and the attacked card is not a tank, cannot attack
         if (isTankOnRow && !attackedCard.isTank()) {
-            objectNode.put("error", "Attacked card is not of type 'Tank’.");
+            objectNode.put("error", "Attacked card is not of type 'Tank'.");
             output.addPOJO(objectNode);
             return;
         }
 
         // deal the damage
-        attackerCard.attackMinion(attackedCard);
+        attackedCard.loseHealth(attackerCard.getAttackDamage());
+
+        // a card cannot attack twice in a turn
+        attackerCard.setAbleToAttack(false);
 
         // if minion is dead, remove from table
         if (attackedCard.isDead()) {
             table.get(attackedX).remove(attackedY);
         }
+    }
+
+    public void cardUsedAbility(ActionsInput command) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        objectNode.put("command", command.getCommand());
+        objectNode.putPOJO("cardAttacker", new Coordinates(command.getCardAttacker()));
+        objectNode.putPOJO("cardAttacked", new Coordinates(command.getCardAttacked()));
+
+        // attacked and attacker coordinates
+        int attackerX = command.getCardAttacker().getX();
+        int attackerY = command.getCardAttacker().getY();
+        int attackedX = command.getCardAttacked().getX();
+        int attackedY = command.getCardAttacked().getY();
+
+        // attacked and attacker cards
+        MinionCard attackerCard = table.get(attackerX).get(attackerY);
+        MinionCard attackedCard = table.get(attackedX).get(attackedY);
+
+        // attacker card must be able to attack and unfrozen
+        if (attackerCard.isFrozen()) {
+            objectNode.put("error", "Attacker card is frozen.");
+            output.addPOJO(objectNode);
+            return;
+        } else if (!attackerCard.isAbleToAttack()) {
+            objectNode.put("error", "Attacker card has already attacked this turn.");
+            output.addPOJO(objectNode);
+            return;
+        }
+
+        // if attacker card is Disciple, target must be allied, else target must be enemy
+        if (gameInfo.getPlayerTurn() == 1 && attackerCard.getName().equals("Disciple") &&
+                (attackedX == 0 || attackedX == 1)) {
+            objectNode.put("error", "Attacked card does not belong to the current player.");
+            output.addPOJO(objectNode);
+            return;
+        } else if (gameInfo.getPlayerTurn() == 2 && attackerCard.getName().equals("Disciple") &&
+                (attackedX == 3 || attackedX == 2)) {
+            objectNode.put("error", "Attacked card does not belong to the current player.");
+            output.addPOJO(objectNode);
+            return;
+        } else if (gameInfo.getPlayerTurn() == 1 && (attackedX == 3 || attackedX == 2)) {
+            objectNode.put("error", "Attacked card does not belong to the enemy.");
+            output.addPOJO(objectNode);
+            return;
+        } else if (gameInfo.getPlayerTurn() == 2 && (attackedX == 0 || attackedX == 1)) {
+            objectNode.put("error", "Attacked card does not belong to the enemy.");
+            output.addPOJO(objectNode);
+            return;
+        }
+
+        // must check for tanks only if target is an enemy (card != Disciple)
+        if (!attackerCard.getName().equals("Disciple")) {
+            // get front row of attacked player
+            LinkedList<MinionCard> attackedFrontRow;
+            if (gameInfo.getPlayerTurn() == 1)
+                attackedFrontRow = table.get(1);
+            else
+                attackedFrontRow = table.get(2);
+
+            // check to see if there is a tank on the enemy's side; tanks can only be on the first row
+            boolean isTankOnRow = false;
+            for (MinionCard minionCard : attackedFrontRow)
+                if (minionCard.isTank()) {
+                    isTankOnRow = true;
+                    break;
+                }
+
+            // if there are tanks on the enemy side and the attacked card is not a tank, cannot attack
+            if (isTankOnRow && !attackedCard.isTank()) {
+                objectNode.put("error", "Attacked card is not of type 'Tank'.");
+                output.addPOJO(objectNode);
+                return;
+            }
+        }
+
+        switch (attackerCard.getName()) {
+            case "Disciple" ->
+                // disciple ability: god's plan
+                ((Disciple) attackerCard).godsPlanAbility(attackedCard);
+            case "Miraj" ->
+                // miraj ability: skyjack
+                ((Miraj) attackerCard).skyjackAbility(attackedCard);
+            case "The Cursed One" -> {
+                // cursed one's ability: shapeshift
+                ((CursedOne) attackerCard).shapeshiftAbility(attackedCard);
+                // if the attacked card's attack damage is 0 and got swapped with his health, he will now be eliminated
+                if (attackedCard.isDead())
+                    table.get(attackedX).remove(attackedY);
+            }
+            default ->
+                // ripper's ability
+                ((Ripper) attackerCard).weakKneesAbility(attackedCard);
+        }
+
+        // a card can attack only once per round
+        attackerCard.setAbleToAttack(false);
     }
 
     public ArrayList<LinkedList<MinionCard>> getTable() {

@@ -82,6 +82,42 @@ public abstract class Card {
             return 0;
         }
     }
+    public static LinkedList<Card> getCardListCopy(LinkedList<Card> initialCardList) {
+        LinkedList<Card> cardListCopy = new LinkedList<>();
+        // make a copy of each card, depending on its type
+        for (Card card : initialCardList) {
+            if (Card.correspondingRow(card) != 0) {
+                // is minion card
+                MinionCard minionCardCopy = new MinionCard((MinionCard)card);
+                cardListCopy.add(minionCardCopy);
+            } else {
+                if (card.getName().equals("Winterfell")) {
+                    // is winterfell card
+                    WinterfellEnvironmentCard cardToCopy = new WinterfellEnvironmentCard((WinterfellEnvironmentCard) card);
+                    cardListCopy.add(cardToCopy);
+                } else if (card.getName().equals("Firestorm")) {
+                    // is firestorm card
+                    FirestormEnvironmentCard cardToCopy = new FirestormEnvironmentCard((FirestormEnvironmentCard) card);
+                    cardListCopy.add(cardToCopy);
+                } else {
+                    // is heart hound card
+                    HeartHoundEnvironmentCard cardToCopy = new HeartHoundEnvironmentCard((HeartHoundEnvironmentCard) card);
+                    cardListCopy.add(cardToCopy);
+                }
+            }
+        }
+        return cardListCopy;
+    }
+
+    public static LinkedList<MinionCard> getMinionCardListCopy(LinkedList<MinionCard> initialCardList) {
+        LinkedList<MinionCard> cardListCopy = new LinkedList<>();
+        // make copy for each card
+        for (MinionCard card : initialCardList) {
+            MinionCard minionCardCopy = new MinionCard(card);
+            cardListCopy.add(minionCardCopy);
+        }
+        return cardListCopy;
+    }
 }
 class MinionCard extends Card {
     private int health;
@@ -104,6 +140,8 @@ class MinionCard extends Card {
         if (this.getName().equals("Warden") || this.getName().equals("Goliath")) {
             isTank = true;
         }
+        this.isFrozen = false;
+        this.ableToAttack = true;
     }
 
     public MinionCard(MinionCard minionCardToCopy) {
@@ -141,11 +179,6 @@ class MinionCard extends Card {
 
     public void setAttackDamage(int attackDamage) {
         this.attackDamage = attackDamage;
-    }
-
-    public void attackMinion(MinionCard attackedCard) {
-        attackedCard.health = attackedCard.health - this.getAttackDamage();
-        this.ableToAttack = false;
     }
 
     public int getHealth() {
@@ -192,17 +225,6 @@ class MinionCard extends Card {
                 + '\''
                 + '}';
     }
-
-    public static LinkedList<MinionCard> getMinionCardListCopy(LinkedList<MinionCard> initialMinionCardList) {
-        LinkedList<MinionCard> minionCardListCopy = new LinkedList<>();
-
-        for (MinionCard minionCard : initialMinionCardList) {
-            MinionCard minionCardCopy = new MinionCard(minionCard);
-            minionCardListCopy.addLast(minionCardCopy);
-        }
-
-        return minionCardListCopy;
-    }
 }
 
 class Ripper extends MinionCard {
@@ -210,8 +232,11 @@ class Ripper extends MinionCard {
         super(rawCard);
     }
 
-    void weakKneesAbility() {
-
+    void weakKneesAbility(MinionCard attackedCard) {
+        // lower attack damage with 2 points or until it reaches 0
+        attackedCard.setAttackDamage(attackedCard.getAttackDamage() - 2);
+        if (attackedCard.getAttackDamage() < 0)
+            attackedCard.setAttackDamage(0);
     }
 
 }
@@ -220,8 +245,11 @@ class Miraj extends MinionCard {
     public Miraj(CardInput rawCard) {
         super(rawCard);
     }
-    void skyjackAbility() {
-
+    void skyjackAbility(MinionCard attackedCard) {
+        // switch health between Miraj and attacked card
+        int swapAux = this  .getHealth();
+        this.setHealth(attackedCard.getHealth());
+        attackedCard.setHealth(swapAux);
     }
 }
 
@@ -229,22 +257,30 @@ class CursedOne extends MinionCard {
     public CursedOne(CardInput rawCard) {
         super(rawCard);
     }
-    void shapeshiftAbility() {
-
+    void shapeshiftAbility(MinionCard attackedCard) {
+        // switch the attack and health of an enemy minion
+        int swapAux = attackedCard.getHealth();
+        attackedCard.setHealth(attackedCard.getAttackDamage());
+        attackedCard.setAttackDamage(swapAux);
     }
 }
 class Disciple extends MinionCard {
     public Disciple(CardInput rawCard) {
         super(rawCard);
     }
-    void godsPlanAbility() {
-
+    void godsPlanAbility(MinionCard healedCard) {
+        // heal allied card with 2 hp
+        healedCard.setHealth(healedCard.getHealth() + 2);
     }
 }
 
 class FirestormEnvironmentCard extends Card {
     public FirestormEnvironmentCard(CardInput rawCard) {
         super(rawCard.getName(), rawCard.getMana(), rawCard.getDescription(), rawCard.getColors());
+    }
+
+    public FirestormEnvironmentCard(FirestormEnvironmentCard firestormEnvironmentCard) {
+        super(firestormEnvironmentCard);
     }
 
     void firestormEffect(LinkedList<MinionCard> cards) {
@@ -285,6 +321,10 @@ class WinterfellEnvironmentCard extends Card {
         super(rawCard.getName(), rawCard.getMana(), rawCard.getDescription(), rawCard.getColors());
     }
 
+    public WinterfellEnvironmentCard(WinterfellEnvironmentCard winterfellEnvironmentCard) {
+        super(winterfellEnvironmentCard);
+    }
+
     void winterfellEffect(LinkedList<MinionCard> cards) {
         // take ability to attack (will be reset next round)
         for (MinionCard card : cards) {
@@ -312,6 +352,10 @@ class WinterfellEnvironmentCard extends Card {
 class HeartHoundEnvironmentCard extends Card {
     public HeartHoundEnvironmentCard(CardInput rawCard) {
         super(rawCard.getName(), rawCard.getMana(), rawCard.getDescription(), rawCard.getColors());
+    }
+
+    public HeartHoundEnvironmentCard(HeartHoundEnvironmentCard heartHoundEnvironmentCard) {
+        super(heartHoundEnvironmentCard);
     }
 
     int heartHoundEffect(LinkedList<MinionCard> cards, ArrayList<LinkedList<MinionCard>> table, int playerTurn) {
@@ -384,6 +428,12 @@ class HeroCard extends Card {
     public HeroCard(CardInput rawCard) {
         super(rawCard.getName(), rawCard.getMana(), rawCard.getDescription(), rawCard.getColors());
         this.setHealth(30);
+    }
+
+    public HeroCard(HeroCard heroCardToCopy) {
+        super(heroCardToCopy.getName(), heroCardToCopy.getMana(), heroCardToCopy.getDescription(),
+                heroCardToCopy.getColors());
+        this.setHealth(heroCardToCopy.getHealth());
     }
 
     public int getHealth() {

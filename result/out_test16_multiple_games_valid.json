@@ -99,7 +99,7 @@
     "colors" : [ "Yellow", "Orange", "Red" ],
     "name" : "Miraj",
     "mana" : 2,
-    "health" : 3,
+    "health" : 4,
     "attackDamage" : 5
   }, {
     "description" : "Standard card: Death incarnate. No better time to die than now.",
@@ -120,7 +120,7 @@
     "colors" : [ "Yellow", "Orange", "Red" ],
     "name" : "Miraj",
     "mana" : 1,
-    "health" : 4,
+    "health" : 3,
     "attackDamage" : 6
   } ], [ {
     "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
@@ -197,8 +197,8 @@
     "colors" : [ "Brown", "Blue" ],
     "name" : "Warden",
     "mana" : 1,
-    "health" : 5,
-    "attackDamage" : 7
+    "health" : 7,
+    "attackDamage" : 5
   }
 }, {
   "command" : "getPlayerMana",
@@ -234,8 +234,8 @@
     "colors" : [ "Brown", "Blue" ],
     "name" : "Warden",
     "mana" : 1,
-    "health" : 5,
-    "attackDamage" : 7
+    "health" : 7,
+    "attackDamage" : 5
   }
 }, {
   "command" : "getFrozenCardsOnTable",
@@ -273,8 +273,8 @@
     "colors" : [ "Brown", "Blue" ],
     "name" : "Warden",
     "mana" : 1,
-    "health" : 5,
-    "attackDamage" : 7
+    "health" : 7,
+    "attackDamage" : 5
   }, {
     "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
     "colors" : [ "Brown", "Black", "Grey" ],
