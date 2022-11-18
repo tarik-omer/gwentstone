@@ -227,25 +227,34 @@ class MinionCard extends Card {
     }
 }
 
-class Ripper extends MinionCard {
+abstract class SpecialMinionCard extends MinionCard {
+    public SpecialMinionCard(CardInput rawCard) { super(rawCard); }
+
+    void specialAbility(MinionCard attackedCard) {
+    }
+}
+
+class Ripper extends SpecialMinionCard {
     public Ripper(CardInput rawCard) {
         super(rawCard);
     }
-
-    void weakKneesAbility(MinionCard attackedCard) {
+    @Override
+    void specialAbility(MinionCard attackedCard) {
         // lower attack damage with 2 points or until it reaches 0
-        attackedCard.setAttackDamage(attackedCard.getAttackDamage() - 2);
+        int prevAttackDamage = attackedCard.getAttackDamage();
+        attackedCard.setAttackDamage(prevAttackDamage - 2);
         if (attackedCard.getAttackDamage() < 0)
             attackedCard.setAttackDamage(0);
     }
 
 }
 
-class Miraj extends MinionCard {
+class Miraj extends SpecialMinionCard {
     public Miraj(CardInput rawCard) {
         super(rawCard);
     }
-    void skyjackAbility(MinionCard attackedCard) {
+    @Override
+    void specialAbility(MinionCard attackedCard) {
         // switch health between Miraj and attacked card
         int swapAux = this  .getHealth();
         this.setHealth(attackedCard.getHealth());
@@ -253,24 +262,27 @@ class Miraj extends MinionCard {
     }
 }
 
-class CursedOne extends MinionCard {
+class CursedOne extends SpecialMinionCard {
     public CursedOne(CardInput rawCard) {
         super(rawCard);
     }
-    void shapeshiftAbility(MinionCard attackedCard) {
+    @Override
+    void specialAbility(MinionCard attackedCard) {
         // switch the attack and health of an enemy minion
         int swapAux = attackedCard.getHealth();
         attackedCard.setHealth(attackedCard.getAttackDamage());
         attackedCard.setAttackDamage(swapAux);
     }
 }
-class Disciple extends MinionCard {
+class Disciple extends SpecialMinionCard {
     public Disciple(CardInput rawCard) {
         super(rawCard);
     }
-    void godsPlanAbility(MinionCard healedCard) {
+    @Override
+    void specialAbility(MinionCard attackedCard) {
         // heal allied card with 2 hp
-        healedCard.setHealth(healedCard.getHealth() + 2);
+        int prevHealth = attackedCard.getHealth();
+        attackedCard.setHealth(prevHealth + 2);
     }
 }
 
@@ -422,6 +434,11 @@ class HeartHoundEnvironmentCard extends Card {
 class HeroCard extends Card {
     private int health;
 
+    @JsonIgnore
+    private boolean isDead;
+    @JsonIgnore
+    private boolean ableToAttack;
+
     public HeroCard() {
 
     }
@@ -433,7 +450,32 @@ class HeroCard extends Card {
     public HeroCard(HeroCard heroCardToCopy) {
         super(heroCardToCopy.getName(), heroCardToCopy.getMana(), heroCardToCopy.getDescription(),
                 heroCardToCopy.getColors());
-        this.setHealth(heroCardToCopy.getHealth());
+        this.setHealth(heroCardToCopy.health);
+    }
+    public void loseHealth(int lostHealth) {
+        int prevHealth = this.health;
+        this.setHealth(prevHealth - lostHealth);
+    }
+
+    public void useHeroAbility(LinkedList<MinionCard> affectedRow) {
+
+    }
+
+    @JsonIgnore
+    public boolean isDead() {
+        if (this.health <= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    @JsonIgnore
+    public boolean isAbleToAttack() {
+        return ableToAttack;
+    }
+    @JsonIgnore
+    public void setAbleToAttack(boolean ableToAttack) {
+        this.ableToAttack = ableToAttack;
     }
 
     public int getHealth() {
@@ -468,9 +510,28 @@ class LordRoyce extends HeroCard {
     public LordRoyce(CardInput rawCard) {
         super(rawCard);
     }
+    @Override
+    public void useHeroAbility(LinkedList<MinionCard> affectedRow) {
+        // freeze card with the highest attack damage on row
 
-    void subZeroAbility() {
+        // initially null; if row is empty, will stay null
+        MinionCard maxAttackMinionCard = null;
 
+        // get max attack damage minion
+        if (affectedRow.size() == 1) {
+            // if only one card, it is max attack damage card
+            maxAttackMinionCard = affectedRow.getFirst();
+        } else if (affectedRow.size() > 1) {
+            // if multiple, get max attack damage card
+            maxAttackMinionCard = affectedRow.getFirst();
+
+            for (int i = 1; i < affectedRow.size(); i++)
+                if (affectedRow.get(i).getHealth() > maxAttackMinionCard.getAttackDamage())
+                    maxAttackMinionCard = affectedRow.get(i);
+        }
+
+        // set card to frozen
+        maxAttackMinionCard.setFrozen(true);
     }
 }
 
@@ -479,8 +540,27 @@ class EmpressThorina extends HeroCard {
         super(rawCard);
     }
 
-    void lowBlowAbility() {
+    @Override
+    public void useHeroAbility(LinkedList<MinionCard> affectedRow) {
+        // destroys card with most hp on row
+        // initially null; if row is empty, will stay null
+        MinionCard maxHealthMinionCard = null;
 
+        // get max health minion
+        if (affectedRow.size() == 1) {
+            // if only one card, it is max hp card
+            maxHealthMinionCard = affectedRow.getFirst();
+        } else if (affectedRow.size() > 1) {
+            // if multiple, get max hp card
+            maxHealthMinionCard = affectedRow.getFirst();
+
+            for (int i = 1; i < affectedRow.size(); i++)
+                if (affectedRow.get(i).getHealth() > maxHealthMinionCard.getHealth())
+                    maxHealthMinionCard = affectedRow.get(i);
+        }
+
+        // kill minion
+        affectedRow.removeFirstOccurrence(maxHealthMinionCard);
     }
 }
 
@@ -489,8 +569,12 @@ class KingMudface extends HeroCard {
         super(rawCard);
     }
 
-    void earthBornAbility() {
-
+    @Override
+    public void useHeroAbility(LinkedList<MinionCard> affectedRow) {
+        // increase health with 1 point for each card on row
+        for (MinionCard card : affectedRow) {
+            card.setHealth(card.getHealth() + 1);
+        }
     }
 }
 
@@ -499,7 +583,11 @@ class GeneralKocioraw extends HeroCard {
         super(rawCard);
     }
 
-    void bloodThirstAbility() {
-
+    @Override
+    public void useHeroAbility(LinkedList<MinionCard> affectedRow) {
+        // increase attack damage with 1 point for each card on row
+        for (MinionCard card : affectedRow) {
+            card.setAttackDamage(card.getAttackDamage() + 1);
+        }
     }
 }

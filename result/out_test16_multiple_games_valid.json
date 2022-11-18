@@ -74,13 +74,15 @@
     "colors" : [ "Red", "Blue", "Pink" ],
     "name" : "Berserker",
     "mana" : 2,
-    "health" : 1,
+    "health" : 2,
     "attackDamage" : 5
   }
 }, {
+  "gameEnded" : "Player two killed the enemy hero."
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
-  "output" : 4
+  "output" : 2
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
@@ -92,7 +94,7 @@
     "colors" : [ "Red", "Blue", "Pink" ],
     "name" : "Berserker",
     "mana" : 2,
-    "health" : 1,
+    "health" : 2,
     "attackDamage" : 5
   } ], [ {
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
@@ -245,6 +247,8 @@
   "playerIdx" : 1,
   "output" : 4
 }, {
+  "gameEnded" : "Player one killed the enemy hero."
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
   "output" : 4
@@ -317,4 +321,13 @@
     "health" : 3,
     "attackDamage" : 5
   } ]
+}, {
+  "command" : "getPlayerOneWins",
+  "output" : 1
+}, {
+  "command" : "getPlayerTwoWins",
+  "output" : 1
+}, {
+  "command" : "getTotalGamesPlayed",
+  "output" : 2
 } ]

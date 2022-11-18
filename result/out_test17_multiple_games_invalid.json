@@ -81,6 +81,8 @@
   "command" : "getFrozenCardsOnTable",
   "output" : [ ]
 }, {
+  "gameEnded" : "Player two killed the enemy hero."
+}, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
     "description" : "Premium card: Fear him. Your last breath is now.",
@@ -133,6 +135,15 @@
     "health" : 2,
     "attackDamage" : 0
   } ]
+}, {
+  "command" : "getTotalGamesPlayed",
+  "output" : 1
+}, {
+  "command" : "getPlayerTwoWins",
+  "output" : 1
+}, {
+  "command" : "getPlayerOneWins",
+  "output" : 0
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
@@ -225,6 +236,13 @@
   "command" : "getFrozenCardsOnTable",
   "output" : [ ]
 }, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 1,
+    "y" : 1
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
   "command" : "getCardAtPosition",
   "x" : 2,
   "y" : 0,
@@ -268,6 +286,8 @@
     "health" : 1,
     "attackDamage" : 5
   }
+}, {
+  "gameEnded" : "Player one killed the enemy hero."
 }, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
@@ -331,4 +351,13 @@
     "name" : "Heart Hound",
     "mana" : 2
   } ]
+}, {
+  "command" : "getTotalGamesPlayed",
+  "output" : 2
+}, {
+  "command" : "getPlayerTwoWins",
+  "output" : 1
+}, {
+  "command" : "getPlayerOneWins",
+  "output" : 1
 } ]

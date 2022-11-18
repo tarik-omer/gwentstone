@@ -28,8 +28,15 @@
     "colors" : [ "Black", "Red" ],
     "name" : "Empress Thorina",
     "mana" : 3,
-    "health" : 30
+    "health" : 18
   }
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 2,
+    "y" : 1
+  },
+  "error" : "Attacker card is frozen."
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
@@ -78,8 +85,22 @@
     "colors" : [ "Black", "Red" ],
     "name" : "Empress Thorina",
     "mana" : 3,
-    "health" : 30
+    "health" : 18
   }
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 1,
+    "y" : 1
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 3,
+    "y" : 1
+  },
+  "error" : "Attacker card has already attacked this turn."
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,

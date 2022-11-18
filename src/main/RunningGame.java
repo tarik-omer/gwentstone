@@ -33,11 +33,15 @@ public class RunningGame {
     }
 
     public void runGame() {
-        int playerOneWins = 0;
-        int playerTwoWins = 0;
-        int currentGame = 1;
 
-        GameInfo gameInfo = new GameInfo(0, 1, 0, 0, 1, 1);
+        GameInfo gameInfo = new GameInfo(0, 0, 0, 0, 1, 1);
+
+        // Statistics Commands use Singleton patter - class is meant to be instantiated only once
+        // get Singleton instance
+        StatisticsCommands statisticsCommands = StatisticsCommands.getInstance();
+        // set fields
+        statisticsCommands.setGameInfo(gameInfo);
+        statisticsCommands.setOutput(output);
 
         for (GameInput game : games) {
             // initialize empty table
@@ -71,21 +75,25 @@ public class RunningGame {
             playerTwo.getPlayerHand().addLast(playerTwo.getPlayerCurrentDeck().removeFirst());
 
             // Player and Debugging Commands use Singleton design pattern - they are meant to be instantiated only once
+            // get Singleton instance
             PlayerCommands playerCommands = PlayerCommands.getInstance();
-
+            // set fields
             playerCommands.setTable(table);
             playerCommands.setGameInfo(gameInfo);
             playerCommands.setOutput(output);
             playerCommands.setPlayerOne(playerOne);
             playerCommands.setPlayerTwo(playerTwo);
-
+            // get Singleton instance
             DebuggingCommands debuggingCommands = DebuggingCommands.getInstance();
-
+            // set fields
             debuggingCommands.setTable(table);
             debuggingCommands.setGameInfo(gameInfo);
             debuggingCommands.setOutput(output);
             debuggingCommands.setPlayerOne(playerOne);
             debuggingCommands.setPlayerTwo(playerTwo);
+
+            // boolean to mark end of game
+            boolean gameEnded = false;
 
             for (ActionsInput command : actionsInput) {
                 // process each command
@@ -120,11 +128,21 @@ public class RunningGame {
                         // statistics commands
                         break;
                     case "getTotalGamesPlayed":
+                        statisticsCommands.getTotalGamesPlayed();
                         break;
                     case "getPlayerOneWins":
+                        statisticsCommands.getPlayerOneWins();
                         break;
-                    case "getPlayerTwoWins": // player commands
+                    case "getPlayerTwoWins":
+                        statisticsCommands.getPlayerTwoWins();
                         break;
+                }
+                // if the game ended, skip player commands
+                if (gameEnded)
+                    continue;
+                // player commands, can be executed only during an active game
+                switch (command.getCommand()) {
+                    // player commands
                     case "placeCard":
                         playerCommands.placeCard(command);
                         break;
@@ -135,8 +153,37 @@ public class RunningGame {
                         playerCommands.cardUsedAbility(command);
                         break;
                     case "useAttackHero":
+                        playerCommands.useAttackHero(command);
+                        // player one kills enemy hero
+                        if (gameInfo.getPlayerTurn() == 1 && playerTwo.getHeroCard().isDead()) {
+                            // display game end message
+                            ObjectMapper objectMapper = new ObjectMapper();
+                            ObjectNode objectNode = objectMapper.createObjectNode();
+                            objectNode.put("gameEnded", "Player one killed the enemy hero.");
+                            output.addPOJO(objectNode);
+                            // mark game as ended
+                            gameEnded = true;
+                            // mark win in win counter
+                            gameInfo.setPlayerOneWins(gameInfo.getPlayerOneWins() + 1);
+                            // count ended game as played game
+                            gameInfo.setCurrentGame(gameInfo.getCurrentGame() + 1);
+                        // player two kills enemy hero
+                        } else if (gameInfo.getPlayerTurn() == 2 && playerOne.getHeroCard().isDead()) {
+                            // display game end message
+                            ObjectMapper objectMapper = new ObjectMapper();
+                            ObjectNode objectNode = objectMapper.createObjectNode();
+                            objectNode.put("gameEnded", "Player two killed the enemy hero.");
+                            output.addPOJO(objectNode);
+                            // mark game as ended
+                            gameEnded = true;
+                            // mark win in win counter
+                            gameInfo.setPlayerTwoWins(gameInfo.getPlayerTwoWins() + 1);
+                            // count ended game as played game
+                            gameInfo.setCurrentGame(gameInfo.getCurrentGame() + 1);
+                        }
                         break;
                     case "useHeroAbility":
+                        playerCommands.useHeroAbility(command);
                         break;
                     case "useEnvironmentCard":
                         playerCommands.useEnvironmentCard(command);
@@ -160,10 +207,12 @@ public class RunningGame {
                             minionCard.setAbleToAttack(true);
                         }
 
-                        // set turn to next player
+                        // set turn to next player and set hero to be able to attack
                         if (gameInfo.getPlayerTurn() == 1) {
+                            playerOne.getHeroCard().setAbleToAttack(true);
                             gameInfo.setPlayerTurn(2);
                         } else if (gameInfo.getPlayerTurn() == 2) {
+                            playerTwo.getHeroCard().setAbleToAttack(true);
                             gameInfo.setPlayerTurn(1);
                         }
 
@@ -187,11 +236,9 @@ public class RunningGame {
                         }
 
                         // TODO: Add JavaDocs
-                        // TODO: Fix PlayerCommands::useCardAbility -> invalid tests
                         break;
                 }
             }
-            currentGame++;
         }
     }
 }

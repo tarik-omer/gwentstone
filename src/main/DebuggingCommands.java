@@ -168,9 +168,12 @@ public class DebuggingCommands {
     public void getCardAtPosition(ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
+        int x = command.getX();
+        int y = command.getY();
+
         objectNode.put("command", command.getCommand());
-        objectNode.put("x", command.getX());
-        objectNode.put("y", command.getY());
+        objectNode.put("x", x);
+        objectNode.put("y", y);
 
         if (table.get(command.getX()).size() > command.getY())
             objectNode.putPOJO("output", new MinionCard(table.get(command.getX()).get(command.getY())));
