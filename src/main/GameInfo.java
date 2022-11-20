@@ -1,15 +1,16 @@
 package main;
 
-public class GameInfo {
+public final class GameInfo {
     private int playerTurn;
     private int currentGame;
     private int playerOneWins;
     private int playerTwoWins;
     private int playerManaGain;
-
     private int currentRound;
 
-    public GameInfo(int playerTurn, int currentGame, int playerOneWins, int playerTwoWins, int playerManaGain, int currentRound) {
+    public GameInfo(final int playerTurn, final int currentGame,
+                    final int playerOneWins, final int playerTwoWins,
+                    final int playerManaGain, final int currentRound) {
         this.playerTurn = playerTurn;
         this.currentGame = currentGame;
         this.playerOneWins = playerOneWins;
@@ -22,7 +23,7 @@ public class GameInfo {
         return currentRound;
     }
 
-    public void setCurrentRound(int currentRound) {
+    public void setCurrentRound(final int currentRound) {
         this.currentRound = currentRound;
     }
 
@@ -30,7 +31,7 @@ public class GameInfo {
         return playerTurn;
     }
 
-    public void setPlayerTurn(int playerTurn) {
+    public void setPlayerTurn(final int playerTurn) {
         this.playerTurn = playerTurn;
     }
 
@@ -38,7 +39,7 @@ public class GameInfo {
         return currentGame;
     }
 
-    public void setCurrentGame(int currentGame) {
+    public void setCurrentGame(final int currentGame) {
         this.currentGame = currentGame;
     }
 
@@ -46,7 +47,7 @@ public class GameInfo {
         return playerOneWins;
     }
 
-    public void setPlayerOneWins(int playerOneWins) {
+    public void setPlayerOneWins(final int playerOneWins) {
         this.playerOneWins = playerOneWins;
     }
 
@@ -54,7 +55,7 @@ public class GameInfo {
         return playerTwoWins;
     }
 
-    public void setPlayerTwoWins(int playerTwoWins) {
+    public void setPlayerTwoWins(final int playerTwoWins) {
         this.playerTwoWins = playerTwoWins;
     }
 
@@ -62,7 +63,7 @@ public class GameInfo {
         return playerManaGain;
     }
 
-    public void setPlayerManaGain(int playerManaGain) {
+    public void setPlayerManaGain(final int playerManaGain) {
         this.playerManaGain = playerManaGain;
     }
 }

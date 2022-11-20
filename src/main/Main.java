@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
-import fileio.*;
+import fileio.Input;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,10 +68,6 @@ public final class Main {
                 Input.class);
 
         ArrayNode output = objectMapper.createArrayNode();
-
-        //TODO add here the entry point to your implementation
-
-        System.out.println("-----------------------------------------------------------------------------------");
 
         RunningGame runningGame = new RunningGame(inputData, output);
         runningGame.runGame();

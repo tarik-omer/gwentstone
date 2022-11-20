@@ -8,7 +8,9 @@ public final class StartGameInput {
     private CardInput playerTwoHero;
     private int startingPlayer;
 
-    public StartGameInput() {}
+    public StartGameInput() {
+
+    }
 
     public int getPlayerOneDeckIdx() {
         return playerOneDeckIdx;

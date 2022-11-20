@@ -3,9 +3,8 @@ package main;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import fileio.ActionsInput;
 
-public class StatisticsCommands {
+public final class StatisticsCommands {
     private GameInfo gameInfo;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -14,6 +13,7 @@ public class StatisticsCommands {
 
     // Singleton
     private static StatisticsCommands instance = null;
+
     private StatisticsCommands() {
 
     }
@@ -26,6 +26,9 @@ public class StatisticsCommands {
         instance = new StatisticsCommands();
     }
 
+    /**
+     * Displays the total number of games played.
+     */
     public void getTotalGamesPlayed() {
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", "getTotalGamesPlayed");
@@ -33,6 +36,9 @@ public class StatisticsCommands {
         output.addPOJO(objectNode);
     }
 
+    /**
+     * Displays the total number of games player one won.
+     */
     public void getPlayerOneWins() {
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", "getPlayerOneWins");
@@ -40,6 +46,9 @@ public class StatisticsCommands {
         output.addPOJO(objectNode);
     }
 
+    /**
+     * Displays the total number of games player two won.
+     */
     public void getPlayerTwoWins() {
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", "getPlayerTwoWins");
@@ -51,7 +60,7 @@ public class StatisticsCommands {
         return gameInfo;
     }
 
-    public void setGameInfo(GameInfo gameInfo) {
+    public void setGameInfo(final GameInfo gameInfo) {
         this.gameInfo = gameInfo;
     }
 
@@ -59,7 +68,7 @@ public class StatisticsCommands {
         return output;
     }
 
-    public void setOutput(ArrayNode output) {
+    public void setOutput(final ArrayNode output) {
         this.output = output;
     }
 }

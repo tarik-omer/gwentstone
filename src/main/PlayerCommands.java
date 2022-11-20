@@ -9,7 +9,7 @@ import fileio.Coordinates;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class PlayerCommands {
+public final class PlayerCommands {
     private ArrayList<LinkedList<MinionCard>> table;
     private Player playerOne;
     private Player playerTwo;
@@ -28,26 +28,23 @@ public class PlayerCommands {
 
     }
 
-    private PlayerCommands(ArrayList<LinkedList<MinionCard>> table, Player playerOne, Player playerTwo, ArrayNode output, GameInfo gameInfo) {
-        this.table = table;
-        this.playerOne = playerOne;
-        this.playerTwo = playerTwo;
-        this.output = output;
-        this.gameInfo = gameInfo;
-    }
-
     public static PlayerCommands getInstance() {
         return instance;
     }
 
-    public void placeCard(ActionsInput command) {
+    /**
+     * Places a card with given index on the table, on the corresponding row.
+     * Card is placed by the current player.
+     * @param command   contains index of card placed from hand
+     */
+    public void placeCard(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
         objectNode.put("handIdx", command.getHandIdx());
 
         Card card;
-
+        // check to see if hand index exists
         if (gameInfo.getPlayerTurn() == 1) {
             if (playerOne.getPlayerHand().size() <= command.getHandIdx()) {
                 System.out.println("You are trying to place a card you don't have");
@@ -67,102 +64,147 @@ public class PlayerCommands {
             return;
         }
 
-        // environment card cannot be placed on table - error
-        if (card.getName().equals("Winterfell") || card.getName().equals("Heart Hound") ||
-                card.getName().equals("Firestorm")) {
+        if (card.getName().equals("Winterfell") || card.getName().equals("Heart Hound")
+                || card.getName().equals("Firestorm")) {
+            // environment card cannot be placed on table - error
             objectNode.put("error", "Cannot place environment card on table.");
             output.addPOJO(objectNode);
-        // not enough mana - error
-        } else if ((gameInfo.getPlayerTurn() == 1 && playerOne.getMana() < card.getMana()) ||
-                gameInfo.getPlayerTurn() == 2 && playerTwo.getMana() < card.getMana()) {
+
+        } else if ((gameInfo.getPlayerTurn() == 1 && playerOne.getMana() < card.getMana())
+                || gameInfo.getPlayerTurn() == 2 && playerTwo.getMana() < card.getMana()) {
+            // not enough mana - error
             objectNode.put("error", "Not enough mana to place card on table.");
             output.addPOJO(objectNode);
+
         } else {
+            int handIdx = command.getHandIdx();
             // we consider cards that must be placed on rows 1 and 2 (front rows)
             // check if rows are full
             if (Card.correspondingRow(card) == 1) {
-                if ((gameInfo.getPlayerTurn() == 1 && table.get(2).size() == 5) ||
-                        (gameInfo.getPlayerTurn() == 2 && table.get(1).size() == 5)) {
-                    objectNode.put("error", "Cannot place card on table since row is full.");
+                if ((gameInfo.getPlayerTurn() == 1 && table.get(2).size() == Global.MAX_ROW_SIZE)
+                        || (gameInfo.getPlayerTurn() == 2
+                        && table.get(1).size() == Global.MAX_ROW_SIZE)) {
+                    objectNode.put("error",
+                            "Cannot place card on table since row is full.");
                     output.addPOJO(objectNode);
                     // if rows are not full, place card on player's front row
                 } else if (gameInfo.getPlayerTurn() == 1) {
-                    table.get(2).addLast((MinionCard) playerOne.getPlayerHand().remove(command.getHandIdx()));
+                    table.get(2).addLast((MinionCard)
+                            playerOne.getPlayerHand().remove(handIdx));
                     playerOne.useMana(card.getMana());
                 } else if (gameInfo.getPlayerTurn() == 2) {
-                    table.get(1).addLast((MinionCard)(playerTwo.getPlayerHand().remove(command.getHandIdx())));
+                    table.get(1).addLast((MinionCard)
+                            (playerTwo.getPlayerHand().remove(handIdx)));
                     playerTwo.useMana(card.getMana());
                 }
                 // we consider cards that must be placed on rows 0 and 3 (back rows)
                 // check if rows are full
             } else if (Card.correspondingRow(card) == -1) {
-                if (gameInfo.getPlayerTurn() == 1 && table.get(3).size() == 5 ||
-                        gameInfo.getPlayerTurn() == 2 && table.get(0).size() == 5) {
-                    objectNode.put("error", "Cannot place card on table since row is full.");
+                if (gameInfo.getPlayerTurn() == 1
+                        && table.get(Global.PLAYER_ONE_BACK_ROW).size() == Global.MAX_ROW_SIZE
+                        || gameInfo.getPlayerTurn() == 2
+                        && table.get(Global.PLAYER_TWO_BACK_ROW).size() == Global.MAX_ROW_SIZE) {
+                    objectNode.put("error",
+                            "Cannot place card on table since row is full.");
                     output.addPOJO(objectNode);
                     // if rows are not full, place card on player's back row
                 } else if (gameInfo.getPlayerTurn() == 1) {
-                    table.get(3).addLast((MinionCard)playerOne.getPlayerHand().remove(command.getHandIdx()));
+                    MinionCard placedCard = (MinionCard) playerOne.getPlayerHand().remove(handIdx);
+                    table.get(Global.PLAYER_ONE_BACK_ROW).addLast(placedCard);
                     playerOne.useMana(card.getMana());
+
                 } else if (gameInfo.getPlayerTurn() == 2) {
-                    table.get(0).addLast((MinionCard)playerTwo.getPlayerHand().remove(command.getHandIdx()));
+                    MinionCard placedCard = (MinionCard) playerTwo.getPlayerHand().remove(handIdx);
+                    table.get(Global.PLAYER_TWO_BACK_ROW).addLast(placedCard);
                     playerTwo.useMana(card.getMana());
                 }
             }
         }
     }
 
-    public void useEnvironmentCard(ActionsInput command) {
+    /**
+     * Uses an environmental card on the table, applying its effect on a given row.
+     * Card is used by the current player.
+     * @param command   contains index of the used card and targeted row
+     */
+    public void useEnvironmentCard(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
         objectNode.put("handIdx", command.getHandIdx());
         objectNode.put("affectedRow", command.getAffectedRow());
 
-        // check whether card is environment card, player has enough mana and affected row is enemy's row
-        if (gameInfo.getPlayerTurn() == 1 && Card.correspondingRow(playerOne.getPlayerHand().get(command.getHandIdx())) != 0) {
-            objectNode.put("error", "Chosen card is not of type environment.");
-            output.addPOJO(objectNode);
-        } else if (gameInfo.getPlayerTurn() == 2 && Card.correspondingRow(playerTwo.getPlayerHand().get(command.getHandIdx())) != 0) {
-            objectNode.put("error", "Chosen card is not of type environment.");
-            output.addPOJO(objectNode);
-        } else if (gameInfo.getPlayerTurn() == 1 && playerOne.getMana() < playerOne.getPlayerHand().get(command.getHandIdx()).getMana()) {
-            objectNode.put("error", "Not enough mana to use environment card.");
-            output.addPOJO(objectNode);
-        } else if (gameInfo.getPlayerTurn() == 2 && playerTwo.getMana() < playerTwo.getPlayerHand().get(command.getHandIdx()).getMana()) {
-            objectNode.put("error", "Not enough mana to use environment card.");
-            output.addPOJO(objectNode);
-        } else if (gameInfo.getPlayerTurn() == 1 && (command.getAffectedRow() == 2 || command.getAffectedRow() == 3)) {
-            objectNode.put("error", "Chosen row does not belong to the enemy.");
-            output.addPOJO(objectNode);
-        } else if (gameInfo.getPlayerTurn() == 2 && (command.getAffectedRow() == 0 || command.getAffectedRow() == 1)) {
-            objectNode.put("error", "Chosen row does not belong to the enemy.");
-            output.addPOJO(objectNode);
-        } else {
-            Card environmentCard;
-            if (gameInfo.getPlayerTurn() == 1)
-                environmentCard = playerOne.getPlayerHand().get(command.getHandIdx());
-            else
-                environmentCard = playerTwo.getPlayerHand().get(command.getHandIdx());
+        int handIdx = command.getHandIdx();
 
+        // check whether card is environment card
+        // player has enough mana and affected row is enemy's row
+        if (gameInfo.getPlayerTurn() == 1
+                && Card.correspondingRow(playerOne.getPlayerHand().get(handIdx)) != 0) {
+            objectNode.put("error", "Chosen card is not of type environment.");
+            output.addPOJO(objectNode);
+
+        } else if (gameInfo.getPlayerTurn() == 2
+                && Card.correspondingRow(playerTwo.getPlayerHand().get(handIdx)) != 0) {
+            objectNode.put("error", "Chosen card is not of type environment.");
+            output.addPOJO(objectNode);
+
+        } else if (gameInfo.getPlayerTurn() == 1
+                && playerOne.getMana() < playerOne.getPlayerHand().get(handIdx).getMana()) {
+            objectNode.put("error", "Not enough mana to use environment card.");
+            output.addPOJO(objectNode);
+
+        } else if (gameInfo.getPlayerTurn() == 2
+                && playerTwo.getMana() < playerTwo.getPlayerHand().get(handIdx).getMana()) {
+            objectNode.put("error", "Not enough mana to use environment card.");
+            output.addPOJO(objectNode);
+
+        } else if (gameInfo.getPlayerTurn() == 1
+                && (command.getAffectedRow() == Global.PLAYER_ONE_FRONT_ROW
+                || command.getAffectedRow() == Global.PLAYER_ONE_BACK_ROW)) {
+            objectNode.put("error", "Chosen row does not belong to the enemy.");
+            output.addPOJO(objectNode);
+
+        } else if (gameInfo.getPlayerTurn() == 2
+                && (command.getAffectedRow() == Global.PLAYER_TWO_BACK_ROW
+                || command.getAffectedRow() == Global.PLAYER_TWO_FRONT_ROW)) {
+            objectNode.put("error", "Chosen row does not belong to the enemy.");
+            output.addPOJO(objectNode);
+
+        } else {
+            // get environment card of current player
+            Card environmentCard;
+            if (gameInfo.getPlayerTurn() == 1) {
+                environmentCard = playerOne.getPlayerHand().get(command.getHandIdx());
+            } else {
+                environmentCard = playerTwo.getPlayerHand().get(command.getHandIdx());
+            }
+            LinkedList<MinionCard> affectedCards = table.get(command.getAffectedRow());
+            // apply effect of chosen environment card
             switch (environmentCard.getName()) {
                 case "Firestorm" -> {
-                    ((FirestormEnvironmentCard) environmentCard).firestormEffect(table.get(command.getAffectedRow()));
+                    ((FirestormEnvironmentCard) environmentCard).firestormEffect(affectedCards);
                 }
                 case "Winterfell" -> {
-                    ((WinterfellEnvironmentCard) environmentCard).winterfellEffect(table.get(command.getAffectedRow()));
+                    ((WinterfellEnvironmentCard) environmentCard).winterfellEffect(affectedCards);
                 }
                 case "Heart Hound" -> {
-                    int err = ((HeartHoundEnvironmentCard) environmentCard).heartHoundEffect(table.get(command.getAffectedRow()),
+                    int err = ((HeartHoundEnvironmentCard)
+                            environmentCard).heartHoundEffect(affectedCards,
                             table, gameInfo.getPlayerTurn());
-                    // if err is 1, card was not moved because player's row is full; else, card was moved, no error
+                    // if err is 1, card was not moved because player's row is full
+                    // else, card was moved, no error
                     if (err == 1) {
-                        objectNode.put("error", "Cannot steal enemy card since the player's row is full.");
+                        objectNode.put("error",
+                                "Cannot steal enemy card since the player's row is full.");
                         output.addPOJO(objectNode);
                         return;
                     }
                 }
+                default ->
+                        throw new IllegalStateException("Unexpected value: "
+                                + environmentCard.getName());
             }
+            // consume mana and remove used card from player hand
             if (gameInfo.getPlayerTurn() == 1) {
                 playerOne.getPlayerHand().remove(command.getHandIdx());
                 playerOne.useMana(environmentCard.getMana());
@@ -173,24 +215,35 @@ public class PlayerCommands {
         }
     }
 
-    public void cardUsesAttack(ActionsInput command) {
+    /**
+     * Attacks an enemy minion using an allied minion.
+     * Attack is done by the current player.
+     * Minion must be placed on the table.
+     * @param command   contains attacker and attacked card coordinates
+     */
+    public void cardUsesAttack(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         // prepare object node, in case of error
         objectNode.put("command", command.getCommand());
 
-        objectNode.putPOJO("cardAttacker", new Coordinates(command.getCardAttacker().getX(),
+        objectNode.putPOJO("cardAttacker",
+                new Coordinates(command.getCardAttacker().getX(),
                 command.getCardAttacker().getY()));
-        objectNode.putPOJO("cardAttacked", new Coordinates(command.getCardAttacked().getX(),
+        objectNode.putPOJO("cardAttacked",
+                new Coordinates(command.getCardAttacked().getX(),
                 command.getCardAttacked().getY()));
 
         // check to see whether attacked card belongs to the enemy
-        if (gameInfo.getPlayerTurn() == 1 && (command.getCardAttacked().getX() == 2 ||
-                command.getCardAttacked().getX() == 3)) {
+        if (gameInfo.getPlayerTurn() == 1
+                && (command.getCardAttacked().getX() == Global.PLAYER_ONE_FRONT_ROW
+                || command.getCardAttacked().getX() == Global.PLAYER_ONE_BACK_ROW)) {
             objectNode.put("error", "Attacked card does not belong to the enemy.");
             output.addPOJO(objectNode);
             return;
-        } else if (gameInfo.getPlayerTurn() == 2 && (command.getCardAttacked().getX() == 1 ||
-                command.getCardAttacked().getX() == 0)) {
+
+        } else if (gameInfo.getPlayerTurn() == 2
+                && (command.getCardAttacked().getX() == Global.PLAYER_TWO_FRONT_ROW
+                || command.getCardAttacked().getX() == Global.PLAYER_TWO_BACK_ROW)) {
             objectNode.put("error", "Attacked card does not belong to the enemy.");
             output.addPOJO(objectNode);
             return;
@@ -239,7 +292,13 @@ public class PlayerCommands {
         }
     }
 
-    public void cardUsedAbility(ActionsInput command) {
+    /**
+     * Uses the ability of an allied minion on another minion.
+     * Ability is used by the current player.
+     * Minion must be placed on the table.
+     * @param command   contains attacker and attacked card coordinates
+     */
+    public void cardUsedAbility(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", command.getCommand());
         objectNode.putPOJO("cardAttacker", new Coordinates(command.getCardAttacker()));
@@ -260,6 +319,7 @@ public class PlayerCommands {
             objectNode.put("error", "Attacker card is frozen.");
             output.addPOJO(objectNode);
             return;
+
         } else if (!attackerCard.isAbleToAttack()) {
             objectNode.put("error", "Attacker card has already attacked this turn.");
             output.addPOJO(objectNode);
@@ -267,23 +327,32 @@ public class PlayerCommands {
         }
 
         // if attacker card is Disciple, target must be allied, else target must be enemy
-        if (gameInfo.getPlayerTurn() == 1 && attackerCard.getName().equals("Disciple") &&
-                (attackedX == 0 || attackedX == 1)) {
-            objectNode.put("error", "Attacked card does not belong to the current player.");
+        if (gameInfo.getPlayerTurn() == 1 && attackerCard.getName().equals("Disciple")
+                && (attackedX == Global.PLAYER_TWO_BACK_ROW
+                        || attackedX == Global.PLAYER_TWO_FRONT_ROW)) {
+            objectNode.put("error",
+                    "Attacked card does not belong to the current player.");
             output.addPOJO(objectNode);
             return;
-        } else if (gameInfo.getPlayerTurn() == 2 && attackerCard.getName().equals("Disciple") &&
-                (attackedX == 3 || attackedX == 2)) {
-            objectNode.put("error", "Attacked card does not belong to the current player.");
+
+        } else if (gameInfo.getPlayerTurn() == 2 && attackerCard.getName().equals("Disciple")
+                && (attackedX == Global.PLAYER_ONE_BACK_ROW
+                || attackedX == Global.PLAYER_ONE_FRONT_ROW)) {
+            objectNode.put("error",
+                    "Attacked card does not belong to the current player.");
             output.addPOJO(objectNode);
             return;
-        } else if (gameInfo.getPlayerTurn() == 1 && !attackerCard.getName().equals("Disciple") &&
-                (attackedX == 3 || attackedX == 2)) {
+
+        } else if (gameInfo.getPlayerTurn() == 1 && !attackerCard.getName().equals("Disciple")
+                && (attackedX == Global.PLAYER_ONE_BACK_ROW
+                        || attackedX == Global.PLAYER_ONE_FRONT_ROW)) {
             objectNode.put("error", "Attacked card does not belong to the enemy.");
             output.addPOJO(objectNode);
             return;
-        } else if (gameInfo.getPlayerTurn() == 2 && !attackerCard.getName().equals("Disciple") &&
-                (attackedX == 0 || attackedX == 1)) {
+
+        } else if (gameInfo.getPlayerTurn() == 2 && !attackerCard.getName().equals("Disciple")
+                && (attackedX == Global.PLAYER_TWO_BACK_ROW
+                        || attackedX == Global.PLAYER_TWO_FRONT_ROW)) {
             objectNode.put("error", "Attacked card does not belong to the enemy.");
             output.addPOJO(objectNode);
             return;
@@ -294,7 +363,8 @@ public class PlayerCommands {
 
             boolean isTankOnRow = PlayerCommands.isTankOnRow(gameInfo, table);
 
-            // if there are tanks on the enemy side and the attacked card is not a tank, cannot attack
+            // if there are tanks on the enemy side and the attacked card is not a tank
+            // => cannot attack
             if (isTankOnRow && !attackedCard.isTank()) {
                 objectNode.put("error", "Attacked card is not of type 'Tank'.");
                 output.addPOJO(objectNode);
@@ -306,14 +376,20 @@ public class PlayerCommands {
         attackerCard.specialAbility(attackedCard);
 
         // check to see if minion died (cursed one case)
-        if (attackedCard.isDead())
+        if (attackedCard.isDead()) {
             table.get(attackedX).remove(attackedY);
-
+        }
         // a card can attack only once per round
         attackerCard.setAbleToAttack(false);
     }
 
-    public void useAttackHero(ActionsInput command) {
+    /**
+     * Attacks the enemy hero with an allied minion.
+     * Attack is done by the current player.
+     * Minion must be placed on the table.
+     * @param command   contains attacker minion
+     */
+    public void useAttackHero(final ActionsInput command) {
         // prepare output in case of error
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", command.getCommand());
@@ -364,7 +440,11 @@ public class PlayerCommands {
         // we check to see if hero card died in main, so we can control the for loop
     }
 
-    public void useHeroAbility(ActionsInput command) {
+    /**
+     * Uses the ability of the current player's hero on a targeted row.
+     * @param command   contains targeted row
+     */
+    public void useHeroAbility(final ActionsInput command) {
         // prepare output in case of error
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", command.getCommand());
@@ -372,11 +452,11 @@ public class PlayerCommands {
 
         // attacker hero card
         HeroCard heroCard;
-        if (gameInfo.getPlayerTurn() == 1)
+        if (gameInfo.getPlayerTurn() == 1) {
             heroCard = playerOne.getHeroCard();
-        else
+        } else {
             heroCard = playerTwo.getHeroCard();
-
+        }
         // player must have enough mana to use hero ability
         if (gameInfo.getPlayerTurn() == 1 && playerOne.getMana() < heroCard.getMana()) {
             objectNode.put("error", "Not enough mana to use hero's ability.");
@@ -396,12 +476,17 @@ public class PlayerCommands {
         }
 
         // if hero has aggressive ability, affected row must be an enemy row
-        if (heroCard.getName().equals("Lord Royce") || heroCard.getName().equals("Empress Thorina")) {
-            if (gameInfo.getPlayerTurn() == 1 && (command.getAffectedRow() == 2 || command.getAffectedRow() == 3)) {
+        if (heroCard.getName().equals("Lord Royce")
+                || heroCard.getName().equals("Empress Thorina")) {
+            if (gameInfo.getPlayerTurn() == 1
+                    && (command.getAffectedRow() == Global.PLAYER_ONE_FRONT_ROW
+                    || command.getAffectedRow() == Global.PLAYER_ONE_BACK_ROW)) {
                 objectNode.put("error", "Selected row does not belong to the enemy.");
                 output.addPOJO(objectNode);
                 return;
-            } else if (gameInfo.getPlayerTurn() == 2 && (command.getAffectedRow() == 0 || command.getAffectedRow() == 1)) {
+            } else if (gameInfo.getPlayerTurn() == 2
+                    && (command.getAffectedRow() == Global.PLAYER_TWO_BACK_ROW
+                    || command.getAffectedRow() == Global.PLAYER_TWO_FRONT_ROW)) {
                 objectNode.put("error", "Selected row does not belong to the enemy.");
                 output.addPOJO(objectNode);
                 return;
@@ -410,13 +495,20 @@ public class PlayerCommands {
         }
 
         // if hero has defensive ability, affected row must be an allied row
-        if (heroCard.getName().equals("King Mudface") || heroCard.getName().equals("General Kocioraw")) {
-            if (gameInfo.getPlayerTurn() == 1 && (command.getAffectedRow() == 1 || command.getAffectedRow() == 0)) {
-                objectNode.put("error", "Selected row does not belong to the current player.");
+        if (heroCard.getName().equals("King Mudface")
+                || heroCard.getName().equals("General Kocioraw")) {
+            if (gameInfo.getPlayerTurn() == 1
+                    && (command.getAffectedRow() == Global.PLAYER_TWO_FRONT_ROW
+                            || command.getAffectedRow() == Global.PLAYER_TWO_BACK_ROW)) {
+                objectNode.put("error",
+                        "Selected row does not belong to the current player.");
                 output.addPOJO(objectNode);
                 return;
-            } else if (gameInfo.getPlayerTurn() == 2 && (command.getAffectedRow() == 2 || command.getAffectedRow() == 3)) {
-                objectNode.put("error", "Selected row does not belong to the current player.");
+            } else if (gameInfo.getPlayerTurn() == 2
+                    && (command.getAffectedRow() == Global.PLAYER_ONE_FRONT_ROW
+                    || command.getAffectedRow() == Global.PLAYER_ONE_BACK_ROW)) {
+                objectNode.put("error",
+                        "Selected row does not belong to the current player.");
                 output.addPOJO(objectNode);
                 return;
             }
@@ -429,36 +521,45 @@ public class PlayerCommands {
         heroCard.setAbleToAttack(false);
 
         // consume player mana
-        if (gameInfo.getPlayerTurn() == 1)
+        if (gameInfo.getPlayerTurn() == 1) {
             playerOne.useMana(heroCard.getMana());
-        else
+        } else {
             playerTwo.useMana(heroCard.getMana());
-
+        }
     }
 
-    public static boolean isTankOnRow(GameInfo gameInfo, ArrayList<LinkedList<MinionCard>> table) {
+    /**
+     * Return whether there are any tanks on the front row of the given player's enemy
+     * @param gameInfo  contains current player
+     * @param table     playing table
+     * @return          true if there are tanks, false if there are no tanks
+     */
+    public static boolean isTankOnRow(final GameInfo gameInfo,
+                                      final ArrayList<LinkedList<MinionCard>> table) {
         // get front row of attacked player
         LinkedList<MinionCard> attackedFrontRow;
-        if (gameInfo.getPlayerTurn() == 1)
+        if (gameInfo.getPlayerTurn() == 1) {
             attackedFrontRow = table.get(1);
-        else
+        } else {
             attackedFrontRow = table.get(2);
-
+        }
         // check to see if there is a tank on the enemy's side; tanks can only be on the first row
         boolean isTankOnRow = false;
-        for (MinionCard minionCard : attackedFrontRow)
+        for (MinionCard minionCard : attackedFrontRow) {
             if (minionCard.isTank()) {
                 isTankOnRow = true;
                 break;
             }
+        }
 
         return isTankOnRow;
     }
+
     public ArrayList<LinkedList<MinionCard>> getTable() {
         return table;
     }
 
-    public void setTable(ArrayList<LinkedList<MinionCard>> table) {
+    public void setTable(final ArrayList<LinkedList<MinionCard>> table) {
         this.table = table;
     }
 
@@ -466,7 +567,7 @@ public class PlayerCommands {
         return playerOne;
     }
 
-    public void setPlayerOne(Player playerOne) {
+    public void setPlayerOne(final Player playerOne) {
         this.playerOne = playerOne;
     }
 
@@ -474,7 +575,7 @@ public class PlayerCommands {
         return playerTwo;
     }
 
-    public void setPlayerTwo(Player playerTwo) {
+    public void setPlayerTwo(final Player playerTwo) {
         this.playerTwo = playerTwo;
     }
 
@@ -482,7 +583,7 @@ public class PlayerCommands {
         return output;
     }
 
-    public void setOutput(ArrayNode output) {
+    public void setOutput(final ArrayNode output) {
         this.output = output;
     }
 
@@ -490,7 +591,7 @@ public class PlayerCommands {
         return gameInfo;
     }
 
-    public void setGameInfo(GameInfo gameInfo) {
+    public void setGameInfo(final GameInfo gameInfo) {
         this.gameInfo = gameInfo;
     }
 }

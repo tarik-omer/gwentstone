@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class Player {
+public final class Player {
     private int mana;
 
     private HeroCard heroCard;
@@ -16,27 +16,19 @@ public class Player {
 
     private LinkedList<Card> playerCurrentDeck;
 
-    public Player (ArrayList<CardInput> playerRawDeck, int mana, CardInput heroCard, int shuffleSeed) {
+    Player(final ArrayList<CardInput> playerRawDeck, final int mana,
+                  final CardInput heroCard, final int shuffleSeed) {
         this.playerHand = new LinkedList<>();
         this.playerCurrentDeck = Player.processDeck(playerRawDeck, shuffleSeed);
         this.mana = mana;
         this.heroCard = Player.processHero(heroCard);
     }
 
-    public int useManaOnCard (Card usedCard) {
-        if (usedCard.getMana() < this.getMana()) {
-            this.setMana(this.getMana() - usedCard.getMana());
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
     public int getMana() {
         return mana;
     }
 
-    public void setMana(int mana) {
+    public void setMana(final int mana) {
         this.mana = mana;
     }
 
@@ -44,7 +36,7 @@ public class Player {
         return heroCard;
     }
 
-    public void setHeroCard(HeroCard heroCard) {
+    public void setHeroCard(final HeroCard heroCard) {
         this.heroCard = heroCard;
     }
 
@@ -52,7 +44,7 @@ public class Player {
         return playerHand;
     }
 
-    public void setPlayerHand(LinkedList<Card> playerHand) {
+    public void setPlayerHand(final LinkedList<Card> playerHand) {
         this.playerHand = playerHand;
     }
 
@@ -60,21 +52,36 @@ public class Player {
         return playerCurrentDeck;
     }
 
-    public void setPlayerCurrentDeck(LinkedList<Card> playerCurrentDeck) {
+    public void setPlayerCurrentDeck(final LinkedList<Card> playerCurrentDeck) {
         this.playerCurrentDeck = playerCurrentDeck;
     }
 
-    public void addMana (int addedMana) {
+    /**
+     * Adds mana to the available mana of the player.
+     * @param addedMana     amount of mana added to the player
+     */
+    public void addMana(final int addedMana) {
         this.setMana(this.getMana() + addedMana);
     }
 
-    public void useMana (int usedMana) {
+    /**
+     * Consumes some available mana of the player
+     * @param usedMana      amount of mana consumed from the player
+     */
+    public void useMana(final int usedMana) {
         this.setMana(this.getMana() - usedMana);
-        if (this.getMana() < 0)
+        if (this.getMana() < 0) {
             System.out.println("Error - somewhere you let mana turn to negative values.");
+        }
     }
-
-    public static LinkedList<Card> processDeck(ArrayList<CardInput> rawDeck, int shuffleSeed) {
+    /**
+     * Returns a list of processed (to custom classes) cards, that is shuffled with the given seed.
+     * @param rawDeck       raw input card list
+     * @param shuffleSeed   seed for the shuffle
+     * @return              processed shuffled card list
+     */
+    public static LinkedList<Card> processDeck(final ArrayList<CardInput> rawDeck,
+                                               final int shuffleSeed) {
         LinkedList<Card> processedDeck = new LinkedList<>();
 
         for (CardInput rawCard : rawDeck) {
@@ -125,20 +132,30 @@ public class Player {
         return processedDeck;
     }
 
-    public static HeroCard processHero(CardInput rawHero) {
-        HeroCard heroCard;
-
+    /**
+     * Returns processed (to custom classes) hero card
+     * @param rawHero   raw input hero card
+     * @return          processed (to HeroCard types) hero card
+     */
+    public static HeroCard processHero(final CardInput rawHero) {
         // based on hero name, create corresponding hero object
         switch (rawHero.getName()) {
-            case "Lord Royce" -> heroCard = new LordRoyce(rawHero);
-            case "Empress Thorina" -> heroCard = new EmpressThorina(rawHero);
-            case "King Mudface" -> heroCard = new KingMudface(rawHero);
-            case "General Kocioraw" -> heroCard = new GeneralKocioraw(rawHero);
+            case "Lord Royce" -> {
+                return new LordRoyce(rawHero);
+            }
+            case "Empress Thorina" -> {
+                return new EmpressThorina(rawHero);
+            }
+            case "King Mudface" -> {
+                return new KingMudface(rawHero);
+            }
+            case "General Kocioraw" -> {
+                return new GeneralKocioraw(rawHero);
+            }
             default -> {
                 System.out.println("Wrong hero");
-                heroCard = null;
+                return null;
             }
         }
-        return heroCard;
     }
 }

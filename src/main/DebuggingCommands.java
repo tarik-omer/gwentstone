@@ -8,7 +8,7 @@ import fileio.ActionsInput;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class DebuggingCommands {
+public final class DebuggingCommands {
     private ArrayList<LinkedList<MinionCard>> table;
     private Player playerOne;
     private Player playerTwo;
@@ -25,8 +25,9 @@ public class DebuggingCommands {
     private DebuggingCommands() {
 
     }
-    private DebuggingCommands(ArrayList<LinkedList<MinionCard>> table, Player playerOne, Player playerTwo, ArrayNode output,
-                      GameInfo gameInfo) {
+    private DebuggingCommands(final ArrayList<LinkedList<MinionCard>> table, final Player playerOne,
+                              final Player playerTwo, final ArrayNode output,
+                              final GameInfo gameInfo) {
         this.output = output;
         this.table = table;
         this.playerOne = playerOne;
@@ -38,48 +39,70 @@ public class DebuggingCommands {
         return instance;
     }
 
-    public void getCardsInHand(ActionsInput command) {
+    /**
+     * Displays the cards in the hand of a given player
+     * @param command   contains index of desired player hand
+     */
+    public void getCardsInHand(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
         objectNode.put("playerIdx", command.getPlayerIdx());
-        if (command.getPlayerIdx() == 1)
-            objectNode.putPOJO("output", Card.getCardListCopy(playerOne.getPlayerHand()));
-        else
-            objectNode.putPOJO("output", Card.getCardListCopy(playerTwo.getPlayerHand()));
-
+        if (command.getPlayerIdx() == 1) {
+            objectNode.putPOJO("output",
+                    Card.getCardListCopy(playerOne.getPlayerHand()));
+        } else {
+            objectNode.putPOJO("output",
+                    Card.getCardListCopy(playerTwo.getPlayerHand()));
+        }
         output.addPOJO(objectNode);
     }
 
-    public void getPlayerDeck(ActionsInput command) {
+    /**
+     * Displays the deck of a given player.
+     * @param command   contains index of desired player deck
+     */
+    public void getPlayerDeck(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
         objectNode.put("playerIdx", command.getPlayerIdx());
 
-        if (command.getPlayerIdx() == 1)
-            objectNode.putPOJO("output", Card.getCardListCopy(playerOne.getPlayerCurrentDeck()));
-        else
-            objectNode.putPOJO("output", Card.getCardListCopy(playerTwo.getPlayerCurrentDeck()));
-
+        if (command.getPlayerIdx() == 1) {
+            objectNode.putPOJO("output",
+                    Card.getCardListCopy(playerOne.getPlayerCurrentDeck()));
+        } else {
+            objectNode.putPOJO("output",
+                    Card.getCardListCopy(playerTwo.getPlayerCurrentDeck()));
+        }
         output.addPOJO(objectNode);
     }
 
-    public void getPlayerHero(ActionsInput command) {
+    /**
+     * Displays the hero card of a given player
+     * @param command   contains index of desired player hero
+     */
+    public void getPlayerHero(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
         objectNode.put("playerIdx", command.getPlayerIdx());
 
-        if (command.getPlayerIdx() == 1)
-            objectNode.putPOJO("output", new HeroCard(playerOne.getHeroCard()));
-        else
-            objectNode.putPOJO("output", new HeroCard(playerTwo.getHeroCard()));
-
+        if (command.getPlayerIdx() == 1) {
+            objectNode.putPOJO("output",
+                    new HeroCard(playerOne.getHeroCard()));
+        } else {
+            objectNode.putPOJO("output",
+                    new HeroCard(playerTwo.getHeroCard()));
+        }
         output.addPOJO(objectNode);
     }
 
-    public void getPlayerTurn(ActionsInput command) {
+    /**
+     * Displays player whose turn it currently is.
+     * @param command   contains command name
+     */
+    public void getPlayerTurn(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
@@ -88,14 +111,18 @@ public class DebuggingCommands {
         output.addPOJO(objectNode);
     }
 
-    public void getCardsOnTable(ActionsInput command) {
+    /**
+     * Displays cards that are currently placed on the table.
+     * @param command   contains command name
+     */
+    public void getCardsOnTable(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
 
         // copy table
         LinkedList<LinkedList<MinionCard>> tableCopy = new LinkedList<>();
-        // add each row
+        // add each row - must be deep-copied
         for (LinkedList<MinionCard> row : table) {
             LinkedList<MinionCard> rowCopy = Card.getMinionCardListCopy(row);
             tableCopy.add(rowCopy);
@@ -105,7 +132,11 @@ public class DebuggingCommands {
         output.addPOJO(objectNode);
     }
 
-    public void getPlayerMana(ActionsInput command) {
+    /**
+     * Displays current mana of given player
+     * @param command   contains index of desired player mana
+     */
+    public void getPlayerMana(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
@@ -121,7 +152,11 @@ public class DebuggingCommands {
         output.addPOJO(objectNode);
     }
 
-    public void getEnvironmentCardsInHand(ActionsInput command) {
+    /**
+     * Displays environment-type cards in the hand of given player
+     * @param command   contains index of desired player environment cards
+     */
+    public void getEnvironmentCardsInHand(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
@@ -147,7 +182,11 @@ public class DebuggingCommands {
         output.addPOJO(objectNode);
     }
 
-    public void getFrozenCardsOnTable(ActionsInput command) {
+    /**
+     * Displays frozen cards placed on the table
+     * @param command   contains command name
+     */
+    public void getFrozenCardsOnTable(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         objectNode.put("command", command.getCommand());
@@ -156,8 +195,9 @@ public class DebuggingCommands {
 
         for (LinkedList<MinionCard> row : table) {
             for (MinionCard card : row) {
-                if (card.isFrozen())
+                if (card.isFrozen()) {
                     frozenCards.add(new MinionCard(card));
+                }
             }
         }
 
@@ -165,7 +205,11 @@ public class DebuggingCommands {
         output.addPOJO(objectNode);
     }
 
-    public void getCardAtPosition(ActionsInput command) {
+    /**
+     * Displays information of the card at the given coordinates.
+     * @param command   contains desired card coordinates
+     */
+    public void getCardAtPosition(final ActionsInput command) {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         int x = command.getX();
@@ -175,11 +219,12 @@ public class DebuggingCommands {
         objectNode.put("x", x);
         objectNode.put("y", y);
 
-        if (table.get(command.getX()).size() > command.getY())
-            objectNode.putPOJO("output", new MinionCard(table.get(command.getX()).get(command.getY())));
-        else
+        if (table.get(command.getX()).size() > command.getY()) {
+            objectNode.putPOJO("output",
+                    new MinionCard(table.get(command.getX()).get(command.getY())));
+        } else {
             objectNode.put("output", "No card available at that position.");
-
+        }
         output.addPOJO(objectNode);
     }
 
@@ -187,7 +232,7 @@ public class DebuggingCommands {
         return table;
     }
 
-    public void setTable(ArrayList<LinkedList<MinionCard>> table) {
+    public void setTable(final ArrayList<LinkedList<MinionCard>> table) {
         this.table = table;
     }
 
@@ -195,7 +240,7 @@ public class DebuggingCommands {
         return playerOne;
     }
 
-    public void setPlayerOne(Player playerOne) {
+    public void setPlayerOne(final Player playerOne) {
         this.playerOne = playerOne;
     }
 
@@ -203,7 +248,7 @@ public class DebuggingCommands {
         return playerTwo;
     }
 
-    public void setPlayerTwo(Player playerTwo) {
+    public void setPlayerTwo(final Player playerTwo) {
         this.playerTwo = playerTwo;
     }
 
@@ -211,7 +256,7 @@ public class DebuggingCommands {
         return output;
     }
 
-    public void setOutput(ArrayNode output) {
+    public void setOutput(final ArrayNode output) {
         this.output = output;
     }
 
@@ -219,7 +264,7 @@ public class DebuggingCommands {
         return gameInfo;
     }
 
-    public void setGameInfo(GameInfo gameInfo) {
+    public void setGameInfo(final GameInfo gameInfo) {
         this.gameInfo = gameInfo;
     }
 }
