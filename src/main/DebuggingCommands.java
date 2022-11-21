@@ -25,16 +25,6 @@ public final class DebuggingCommands {
     private DebuggingCommands() {
 
     }
-    private DebuggingCommands(final ArrayList<LinkedList<MinionCard>> table, final Player playerOne,
-                              final Player playerTwo, final ArrayNode output,
-                              final GameInfo gameInfo) {
-        this.output = output;
-        this.table = table;
-        this.playerOne = playerOne;
-        this.playerTwo = playerTwo;
-        this.gameInfo = gameInfo;
-    }
-
     public static DebuggingCommands getInstance() {
         return instance;
     }
