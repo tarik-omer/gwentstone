@@ -437,7 +437,30 @@ public final class PlayerCommands {
         // mark attacker as unable to attack
         attackerCard.setAbleToAttack(false);
 
-        // we check to see if hero card died in main, so we can control the for loop
+        // player one kills enemy hero
+        if (gameInfo.getPlayerTurn() == 1 && playerTwo.getHeroCard().isDead()) {
+            // display game end message
+            ObjectNode objectNodeEndgame = objectMapper.createObjectNode();
+            objectNodeEndgame.put("gameEnded",
+                    "Player one killed the enemy hero.");
+            output.addPOJO(objectNodeEndgame);
+            // mark win in win counter
+            gameInfo.setPlayerOneWins(gameInfo.getPlayerOneWins() + 1);
+            // count ended game as played game
+            gameInfo.setCurrentGame(gameInfo.getCurrentGame() + 1);
+            // player two kills enemy hero
+        } else if (gameInfo.getPlayerTurn() == 2
+                && playerOne.getHeroCard().isDead()) {
+            // display game end message
+            ObjectNode objectNodeEndgame = objectMapper.createObjectNode();
+            objectNodeEndgame.put("gameEnded",
+                    "Player two killed the enemy hero.");
+            output.addPOJO(objectNodeEndgame);
+            // mark win in win counter
+            gameInfo.setPlayerTwoWins(gameInfo.getPlayerTwoWins() + 1);
+            // count ended game as played game
+            gameInfo.setCurrentGame(gameInfo.getCurrentGame() + 1);
+        }
     }
 
     /**

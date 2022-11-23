@@ -1,4 +1,2 @@
 Starting audit...
-[ERROR] C:\Users\tarik_ilhan.omer\OneDrive - Universitatea Politehnica Bucuresti\Desktop\gwentstone\.\src\main\RunningGame.java:41:5: Method length is 164 lines (max allowed is 150). [MethodLength]
 Audit done.
-Checkstyle ends with 1 errors.

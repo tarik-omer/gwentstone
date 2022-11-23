@@ -1,8 +1,6 @@
 package main;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.ActionsInput;
 import fileio.GameInput;
 import fileio.DecksInput;
@@ -112,35 +110,7 @@ public final class RunningGame {
                     case "placeCard" -> playerCommands.placeCard(command);
                     case "cardUsesAttack" -> playerCommands.cardUsesAttack(command);
                     case "cardUsesAbility" -> playerCommands.cardUsedAbility(command);
-                    case "useAttackHero" -> {
-                        playerCommands.useAttackHero(command);
-                        // player one kills enemy hero
-                        if (gameInfo.getPlayerTurn() == 1 && playerTwo.getHeroCard().isDead()) {
-                            // display game end message
-                            ObjectMapper objectMapper = new ObjectMapper();
-                            ObjectNode objectNode = objectMapper.createObjectNode();
-                            objectNode.put("gameEnded",
-                                    "Player one killed the enemy hero.");
-                            output.addPOJO(objectNode);
-                            // mark win in win counter
-                            gameInfo.setPlayerOneWins(gameInfo.getPlayerOneWins() + 1);
-                            // count ended game as played game
-                            gameInfo.setCurrentGame(gameInfo.getCurrentGame() + 1);
-                            // player two kills enemy hero
-                        } else if (gameInfo.getPlayerTurn() == 2
-                                && playerOne.getHeroCard().isDead()) {
-                            // display game end message
-                            ObjectMapper objectMapper = new ObjectMapper();
-                            ObjectNode objectNode = objectMapper.createObjectNode();
-                            objectNode.put("gameEnded",
-                                    "Player two killed the enemy hero.");
-                            output.addPOJO(objectNode);
-                            // mark win in win counter
-                            gameInfo.setPlayerTwoWins(gameInfo.getPlayerTwoWins() + 1);
-                            // count ended game as played game
-                            gameInfo.setCurrentGame(gameInfo.getCurrentGame() + 1);
-                        }
-                    }
+                    case "useAttackHero" -> playerCommands.useAttackHero(command);
                     case "useHeroAbility" -> playerCommands.useHeroAbility(command);
                     case "useEnvironmentCard" -> playerCommands.useEnvironmentCard(command);
                     case "endPlayerTurn" -> {

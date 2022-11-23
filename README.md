@@ -2,6 +2,10 @@
 
 <b><font size=6 ><center>GWENTSTONE</center></div></font></b>
 
+Name: **Omer Tarik Ilhan**
+
+Group: **324CA**
+
 ## Description
 A fast-paced, turn-based strategy card game, in which two opponents use their limited
 mana in order to summon different types of minions or cast environment spells,
@@ -142,11 +146,17 @@ the cards in each player's hand, deck.
 - getPlayerTwoWins: displays the number of games won by player two
 
 ## Class Structure
-<center>The Class Structure used for input</center>
+<font size = 5><center>Input Class Hierarchy</center></font>
 
-<center>The Class and Method Structure used for commands</center>
+<img src="images/input gwentstone.jpeg" alt="Input">
 
-<center>The Class Structure used for cards</center>
+<font size = 5><center>Commands Structure</center></font>
+
+<img src="images/structura metode.jpeg" alt="Methods">
+
+<font size = 5><center>Card Class Hierarchy </center></font>
+
+<img src="images/card hierarchy.jpeg" alt="Card Hierarchy">
 
 ## Implementation
 
